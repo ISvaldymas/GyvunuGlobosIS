@@ -1,5 +1,5 @@
 Idiegti nauja projekta:<br>
------------------------<br>
+-----------------------
 git clone https://github.com/InformaciniuSistemuPagrindai/KambariuRezervacija.git<br>
 cd KambariuRezervacija<br>
 composer install<br>
@@ -14,3 +14,10 @@ git add .<br>
 git status<br>
 git commit -m "New project"<br>
 git push -u origin master
+Laravel on windows:<br>
+----------------------
+download and install xampp:    https://www.apachefriends.org/index.html<br>
+download and install composer: https://getcomposer.org/Composer-Setup.exe<br>
+download and install git: https://git-scm.com/downloads<br>
+
+Spaudžiame dešinį pelės klaviša tame folderyje, kur norime išsaugoti laravel projektą, pasirenkame <b>Git Bash Here</b> vedame komandas.
