@@ -15,5 +15,3 @@
     <script src="Style/Js/bootstrap-datepicker.js"></script>
     <script src="Style/Js/unslider.js"></script>
     <script src="Style/Js/main.js"></script>
-  </body>
-</html>

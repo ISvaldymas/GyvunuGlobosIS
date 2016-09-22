@@ -1,4 +1,8 @@
-  @include('KambariuRezervacija.Layout.Partials.header')
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    @include('KambariuRezervacija.Layout.Partials.header')
+  </head>
   <body>
     <!-- Navigation -->
     @include('KambariuRezervacija.Layout.Partials.navigation')
@@ -16,5 +20,7 @@
           </div>
         </div>
     </div>
-    <!-- search -->
+    <!-- footer -->
     @include('KambariuRezervacija.Layout.Partials.footer')
+  </body>
+</html>
