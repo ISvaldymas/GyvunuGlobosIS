@@ -15,7 +15,7 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li class="active" >
-                        <a href="#">Pagrindinis</a>
+                        <a href="{{ url('/') }}">Pagrindinis</a>
                     </li>
                     <li>
                         <a href="#">Kambariai</a>
@@ -31,11 +31,17 @@
                     </li>
                 </ul>
                 <!-- /. Login form -->
-                @include('KambariuRezervacija.Layout.Partials.login')
+                @if(!Auth::check())
+                    @include('KambariuRezervacija.Layout.Partials.login')
+                @else
+                    @include('KambariuRezervacija.Layout.Partials.profile')
+                @endif
             </div>
             <!-- /.navbar-collapse -->
         </div>
         <!-- /.container -->
     </nav>
     <!-- /.Registartion form -->
-    @include('KambariuRezervacija.Layout.Partials.register')
+    @if(!Auth::check())
+        @include('KambariuRezervacija.Layout.Partials.register')
+    @endif

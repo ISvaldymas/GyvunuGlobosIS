@@ -21,3 +21,12 @@ download and install composer: https://getcomposer.org/Composer-Setup.exe<br>
 download and install git: https://git-scm.com/downloads<br>
 
 Spaudžiame dešinį pelės klaviša tame folderyje, kur norime išsaugoti laravel projektą, pasirenkame <b>Git Bash Here</b> vedame komandas.
+
+Komandos:<br>
+----------------------
+php artisan make:model Model_name -m arba --migartion	//Sukuria modeli, -m kartus sukuria migracija db<br>
+php artisan make:controller NameController --resource	//Sukuria kontrolleri --resource kartus su CRUD<br>
+php artisan make:seeder NameSeeder						//Sukuria seeda duomenu bazei<br>
+php artisan route:list									//Isvardija routus<br>
+Daugiau ivairiu komandu: php artisan list<br>
+

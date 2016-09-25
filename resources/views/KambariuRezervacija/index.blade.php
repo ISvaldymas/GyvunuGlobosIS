@@ -1,5 +1,8 @@
 @extends('KambariuRezervacija.Layout.main')
 @section('title', ' Pagrindinis')
+@section('search') @include('KambariuRezervacija.Layout.Partials.search') @endsection
+@section('slider') @include('KambariuRezervacija.Layout.Partials.slider') @endsection
+@section('width') <div class="col-md-9"> @endsection
 @section('content')
   <div class="col-sm-4 col-lg-4 col-md-4">
       <div class="thumbnail">

@@ -10,10 +10,10 @@
     <div class="container">
         <div class="row">
           <!-- search -->
-          @include('KambariuRezervacija.Layout.Partials.search')
-          <div class="col-md-9">
+          @yield('search')
+          @yield('width')
             <!-- slider -->
-            @include('KambariuRezervacija.Layout.Partials.slider')
+            @yield('slider')
             <div class="row">
               @yield('content')
             </div>

@@ -11,4 +11,13 @@
 |
 */
 
-Route::get('/', 'PagesController@getIndex');
+Route::group(['middleware' => 'guest'], function () {
+	//Only guests users may enter:
+	Route::get('/', 'PagesController@getIndex');
+});
+
+Route::auth();
+Route::group(['middleware' => 'auth'], function () {
+	//Only authenticated users may enter:
+	Route::get('/home', 'PagesController@home');
+});
