@@ -8,9 +8,7 @@
                     <div class="col-md-12">
                         <form class="form" role="form" method="POST" action="{{ url('/login') }}" accept-charset="UTF-8" id="login_form">
                             {{ csrf_field() }}
-                            <div class="alert alert-danger" role="alert" id="error">
-                              <strong>Klaida: </strong> Neteisingi prisijungimo duomenys.
-                            </div>
+                            <div class="alert alert-danger" role="alert" id="error"></div>
                             <div class="form-group">
                                 <label class="sr-only" for="InputEmail">Elektroninis paštas</label>
                                 <input type="email" class="form-control" id="email" placeholder="Elektroninis paštas" name="email" value="{{ old('email') }}" required>
@@ -35,9 +33,9 @@
                 <div class="row" id="logged_field">
                     <div class="col-md-12 text-center">
                         <span class="glyphicon glyphicon-ok-circle" style="font-size: 8em; color: #5cb85c;" aria-hidden="true"></span>
-                        <p>
-                            <strong style="color: #5cb85c;">Sėkmingai prisijungta ...</strong>
-                        </p>
+                      <div class="alert alert-success" role="alert">
+                        <strong>Sėkmingai prisijungta ...</strong>
+                      </div>
                     </div>
                 </div>
             </li>

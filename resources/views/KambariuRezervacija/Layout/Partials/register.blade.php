@@ -17,11 +17,11 @@
               </div>
               <div class="form-group" id="reg_pasw">
                   <label class="sr-only" for="exampleInputPassword2">Slaptažodis</label>
-                  <input type="password" class="form-control" name="password" id="password" placeholder="Slaptažodis" required>
+                  <input type="password" class="form-control" minlength="6" name="password" id="password" placeholder="Slaptažodis" required>
               </div>  
               <div class="form-group" id="reg_conf_pasw">
                   <label class="sr-only" for="exampleInputPassword2">Pakartoti slaptažodis</label>
-                  <input type="password" class="form-control" name="password_confirmation" id="password-confirm" placeholder="Pakartoti slaptažodis" required>
+                  <input type="password" minlength="6" class="form-control" name="password_confirmation" id="password-confirm" placeholder="Pakartoti slaptažodis" required>
               </div>                
           </div>
           <div class="modal-footer">
