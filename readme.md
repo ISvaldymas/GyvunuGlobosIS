@@ -30,3 +30,12 @@ php artisan make:seeder NameSeeder						//Sukuria seeda duomenu bazei<br>
 php artisan route:list									//Isvardija routus<br>
 Daugiau ivairiu komandu: php artisan list<br>
 
+.env<br>
+----------------------
+Nusikopijuoti, kad veiktu el. laiškai:<br>
+MAIL_DRIVER=smtp<br>
+MAIL_HOST=smtp.gmail.com<br>
+MAIL_PORT=25<br>
+MAIL_USERNAME=kambariurezervacija@gmail.com<br>
+MAIL_PASSWORD=InformaciniaiPagrindai<br>
+MAIL_ENCRYPTION=tls<br>
