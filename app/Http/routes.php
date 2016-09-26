@@ -20,5 +20,6 @@ Route::get('/email/confirm/{token?}', 'Auth\EmailConfirmController@confirmEmail'
 Route::group(['middleware' => 'auth'], function () {
 	//Only authenticated users may enter:
 	Route::get('/home', 'PagesController@home');
+	Route::get('/email/resend_confirm', 'Auth\EmailConfirmController@resendConfirmEmail');
 
 });

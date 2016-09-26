@@ -6,9 +6,10 @@
   <body>
     <!-- Navigation -->
     @include('KambariuRezervacija.Layout.Partials.navigation')
+    <!-- Flash message -->
+    @include('KambariuRezervacija.Layout.Partials.flashMessage')
     <!-- Page Content -->
     <div class="container">
-
         <div class="row">
           <!-- search -->
           @yield('search')

@@ -46,7 +46,7 @@
             <div class="alert alert-warning col-md-12 text-center">
                 <strong>
                     <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
-                    Elektroninis paštas nepatvirtintas. <a href="#">Persiųsti patvirtinimą?</a>
+                    Elektroninis paštas nepatvirtintas. <a href="{{ url('email/resend_confirm') }}">Persiųsti patvirtinimą?</a>
                 </strong>
             </div>    
         @endif
