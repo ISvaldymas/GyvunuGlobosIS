@@ -24,8 +24,14 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    //Kardinalumai
     public function state()
     {
         return $this->hasOne('App\State', 'id', 'state_fk');
+    }
+
+    public function confirmed_email()
+    {
+        return $this->hasOne('App\EmailConfirm', 'email', 'email');
     }
 }

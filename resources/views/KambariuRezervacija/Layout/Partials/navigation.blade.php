@@ -42,7 +42,7 @@
         <!-- /.container -->
     </nav>
     @if(Auth::check())
-        @if(Auth::user()->state->id == 2)
+        @if(Auth::user()->state->id == 3)
             <div class="alert alert-warning col-md-12 text-center">
                 <strong>
                     <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
