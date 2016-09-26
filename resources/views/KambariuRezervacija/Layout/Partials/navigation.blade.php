@@ -41,6 +41,16 @@
         </div>
         <!-- /.container -->
     </nav>
+    @if(Auth::check())
+        @if(Auth::user()->state->id == 2)
+            <div class="alert alert-warning col-md-12 text-center">
+                <strong>
+                    <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
+                    Elektroninis paštas nepatvirtintas. <a href="#">Persiųsti patvirtinimą?</a>
+                </strong>
+            </div>    
+        @endif
+    @endif
     <!-- /.Registartion form -->
     @if(!Auth::check())
         @include('KambariuRezervacija.Layout.Partials.register')

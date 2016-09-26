@@ -8,6 +8,7 @@
     @include('KambariuRezervacija.Layout.Partials.navigation')
     <!-- Page Content -->
     <div class="container">
+
         <div class="row">
           <!-- search -->
           @yield('search')
