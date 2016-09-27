@@ -7,6 +7,12 @@ use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Hash;
+use App\EmailConfirm;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -65,6 +71,56 @@ class AuthController extends Controller
         return User::create([
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
+        ]);
+    }
+
+
+    //override:
+    public function register(Request $request)
+    {
+        $validator = $this->validator($request->all());
+
+        if ($validator->fails()) {
+            $this->throwValidationException(
+                $request, $validator
+            );
+        }
+
+        Auth::guard($this->getGuard())->login($this->create($request->all()));
+
+        $token = hash_hmac('sha256', uniqid(), Str::random(40));
+        $data = array(
+            'user'  => Auth::user(),
+            'token'  => $token,
+        );
+        Mail::send('Auth.emails.confirm', $data, function ($message) {
+            $message->from('kambariurezervacija@gmail.com', 'Informaciniai pagrindai');
+            $message->to(Auth::user()->email)->subject('Kambarių rezervacija - el. pašto patvirtinimas:');
+        });
+
+        $email_confirm = new EmailConfirm;
+        $email_confirm->email = Auth::user()->email;
+        $email_confirm->token = $token;
+        $email_confirm->user_fk = Auth::user()->id;
+        $email_confirm -> save();
+
+        return response()->json([
+            'state' => 'succses'
+        ]);
+    }
+
+    //override:
+    protected function handleUserWasAuthenticated(Request $request, $throttles)
+    {
+        if ($throttles) {
+            $this->clearLoginAttempts($request);
+        }
+
+        if (method_exists($this, 'authenticated')) {
+            return $this->authenticated($request, Auth::guard($this->getGuard())->user());
+        }
+        return response()->json([
+            'state' => 'succses'
         ]);
     }
 }

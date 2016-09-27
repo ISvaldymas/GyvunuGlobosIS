@@ -55,7 +55,7 @@ return [
     |
     */
 
-    'from' => ['address' => 'kambariurezervacija@gmail.com', 'name' => 'Kambariu Rezervacija'],
+    'from' => ['address' => 'a5a2308d95-9b47a6@inbox.mailtrap.io', 'name' => 'Kambariu Rezervacija'],
 
     /*
     |--------------------------------------------------------------------------
