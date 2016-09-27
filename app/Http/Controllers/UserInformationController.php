@@ -30,7 +30,7 @@ class UserInformationController extends Controller
 	        'phone'      		 => 'required|max:20|min:9',
 	        'adress'        	 => 'required|max:200|min:5',
 	        'age_group_fk'       => 'required',
-	         $newsletter_fk         => 'integer',
+	         $newsletter_fk      => 'integer',
 	    ));
 
         $UserInformation = new UserInformation;
@@ -40,9 +40,9 @@ class UserInformationController extends Controller
         $UserInformation->adress = $request -> adress;
         $UserInformation->age_group_fk = $age_group_fk;
         $UserInformation->newsletter_fk = $newsletter_fk;
-        $UserInformation->user_id_fk = Auth::user()->id;
         $UserInformation -> save();
         Auth::user()->state_fk = 1;
+        Auth::user()->information_fk = $UserInformation->id;
         Auth::user()->save();
         $message = "Registracija baigta. Dėkojame, kad naudojatės Kambarių rezervacijos sistema.";
         Session::flash('succsess', $message);
