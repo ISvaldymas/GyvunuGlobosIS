@@ -123,4 +123,14 @@ class AuthController extends Controller
             'state' => 'succses'
         ]);
     }
+
+    //override:
+    protected function sendFailedLoginResponse(Request $request)
+    {
+
+        return response()->json([
+            'state' => 'error',
+            $this->loginUsername() => $this->getFailedLoginMessage()
+        ]);
+    }
 }
