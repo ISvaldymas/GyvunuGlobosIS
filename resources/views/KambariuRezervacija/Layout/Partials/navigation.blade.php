@@ -48,7 +48,7 @@
                     <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
                     Elektroninis paštas nepatvirtintas. <a href="{{ url('email/resend_confirm') }}">Persiųsti patvirtinimą?</a>
                 </strong>
-            </div>    
+            </div>
         @endif
     @endif
     <!-- /.Registartion form -->

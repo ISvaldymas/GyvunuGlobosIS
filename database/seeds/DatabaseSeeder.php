@@ -12,5 +12,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call(StatesSeeder::class);
+        $this->call(RoleSeeder::class);
+        $this->call(AgeGroupSeeder::class);
     }
 }

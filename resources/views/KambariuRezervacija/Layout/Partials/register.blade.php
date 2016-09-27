@@ -36,7 +36,7 @@
               <span class="glyphicon glyphicon-info-sign" style="font-size: 8em; color: #428bca;" aria-hidden="true"></span>
               <hr>
               <div class="alert alert-warning" role="alert">
-                <strong>Registracija(1):</strong><br/>I el. paštą buvo išsiųstas laiškas su patvirtinimo kodu. Neaglėsite pabaigti registracijos kol el. paštas nebus patvirtintas.
+                <strong>Registracija(1/2):</strong><br/>I el. paštą buvo išsiųstas laiškas su patvirtinimo kodu. Neaglėsite pabaigti registracijos kol el. paštas nebus patvirtintas.
               </div>
           </div>
       </div>

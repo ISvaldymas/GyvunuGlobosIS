@@ -17,9 +17,9 @@ class CreateUserInformationsTable extends Migration
             $table->string('name', 50);
             $table->string('lastname', 50);
             $table->integer('age_group_fk')->default(1)->unsigned();
+            $table->integer('user_id_fk')->unsigned();
             $table->string('phone', 20);
             $table->string('adress', 200);
-            $table->integer('role_fk')->default(1)->unsigned();
             $table->integer('newsletter_fk')->default(1)->unsigned();
             $table->integer('image_fk')->default(1)->unsigned();
             $table->timestamps();

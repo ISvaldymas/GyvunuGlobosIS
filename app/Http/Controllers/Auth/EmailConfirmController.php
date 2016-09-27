@@ -28,7 +28,7 @@ class EmailConfirmController extends Controller
         }
         $message = "Elektroninis paštas(". $email . ") sėkmingai patvirtintas.";
         Session::flash('succsess', $message);
-        return redirect('/home');
+        return redirect('/registration');
     }
 
     public function resendConfirmEmail()
