@@ -20,7 +20,7 @@ class CreateUserInformationsTable extends Migration
             $table->string('phone', 20);
             $table->string('adress', 200);
             $table->integer('newsletter_fk')->default(1)->unsigned();
-            $table->integer('image_fk')->default(1)->unsigned();
+            $table->integer('photo_fk')->nullable()->unsigned();
             $table->timestamps();
         });
     }

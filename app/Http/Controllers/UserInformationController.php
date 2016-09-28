@@ -7,8 +7,11 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\AgeGroup;
 use App\UserInformation;
+use App\Photo;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Session;
+use Image;
 
 class UserInformationController extends Controller
 {
@@ -40,6 +43,28 @@ class UserInformationController extends Controller
         $UserInformation->adress = $request -> adress;
         $UserInformation->age_group_fk = $age_group_fk;
         $UserInformation->newsletter_fk = $newsletter_fk;
+
+        if($request->hasFile('avatar')){
+        	$avatar = $request->file('avatar');
+        	$ext = $avatar->getClientOriginalExtension();
+        	$filename = time(). '.' . $ext;
+        	$location = public_path('database/users/' . Auth::user()->id . '/' . $filename);
+        	File::makeDirectory(public_path('database/users/' . Auth::user()->id));
+        	$img = Image::make($avatar)->resize(250, 250)->save($location);
+
+        	//database
+        	$photo = new Photo;
+        	$photo->url 	= 'database/users/' . Auth::user()->id . '/' . $filename;
+        	$photo->ext 	= $ext;
+        	$photo->size 	= $img->filesize();
+        	$photo->cover 	= 1;
+        	$photo->save();
+
+        	//Istrinti admin seeda, padryti git. ignore.
+        }
+
+
+        $UserInformation -> photo_fk = $photo->id; //pakeisti i photo_fk
         $UserInformation -> save();
         Auth::user()->state_fk = 1;
         Auth::user()->information_fk = $UserInformation->id;

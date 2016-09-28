@@ -2,9 +2,9 @@
 @section('title', ' Registracija(2)')
 @section('width') <div class="col-md-12"> @endsection
 @section('content')
-<form class="form" role="form" method="POST" action="{{ url('/registration/store') }}" accept-charset="UTF-8" id="registration_form">
+<form class="form" role="form" method="POST" action="{{ url('/registration/store') }}" accept-charset="UTF-8" id="registration_form" enctype="multipart/form-data">
   {{ csrf_field() }}
-  <div class="col-md-12 alert alert-success text-center" role="alert">
+  <div class="col-md-12 alert alert-warning text-center" role="alert">
     <strong>Registracija(2/2):</strong> prašome pabaigti vesti vartotojo duomeinis.
   </div>
   <div class="col-md-6 well">
@@ -70,10 +70,14 @@
   </div>
   <div class="col-md-6  text-center">
     <h3>Profilio nuotrauka</h3>
-    <img src="/Style/Images/avatar.jpg" alt="..." class="img-thumbnail" />
+    <img src="/Style/Images/avatar.jpg" width="250" height="250" alt="Avatar" id="avatar_show" class="img-thumbnail" />
     <div class="form-group">
-      <input style="margin: 0 auto !important" type="file" id="exampleInputFile">
+      <input style="margin: 0 auto !important" type="file" id="avatar" name="avatar">
+      <br><button id="remove_button" type="button" class="hidden btn btn-danger btn-lg" style="width:250px;"><span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span> Pašalinti</button>
     </div>
   </div>
 </form>
+@endsection
+@section('scripts')
+  <script src="/Style/Js/Image_upload.js"></script>
 @endsection
