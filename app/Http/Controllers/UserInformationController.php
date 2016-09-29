@@ -29,11 +29,12 @@ class UserInformationController extends Controller
 	    $this -> validate($request, array(
 	        'name'          	 => 'required|max:50|min:5',
 	        'lastname'   		 => 'required|max:50|min:5',
-	         (int)$age_group_fk  => 'integer',
+	         (int)$age_group_fk      => 'integer',
 	        'phone'      		 => 'required|max:20|min:9',
 	        'adress'        	 => 'required|max:200|min:5',
-	        'age_group_fk'       => 'required',
-	         $newsletter_fk      => 'integer',
+	        'age_group_fk'           => 'required',
+	         $newsletter_fk          => 'integer',
+                 'avatar'                => 'sometimes|image',
 	    ));
 
         $UserInformation = new UserInformation;
@@ -59,12 +60,8 @@ class UserInformationController extends Controller
         	$photo->size 	= $img->filesize();
         	$photo->cover 	= 1;
         	$photo->save();
-
-        	//Istrinti admin seeda, padryti git. ignore.
+                $UserInformation -> photo_fk = $photo->id;
         }
-
-
-        $UserInformation -> photo_fk = $photo->id; //pakeisti i photo_fk
         $UserInformation -> save();
         Auth::user()->state_fk = 1;
         Auth::user()->information_fk = $UserInformation->id;

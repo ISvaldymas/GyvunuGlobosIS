@@ -71,8 +71,13 @@
   <div class="col-md-6  text-center">
     <h3>Profilio nuotrauka</h3>
     <img src="/Style/Images/avatar.jpg" width="250" height="250" alt="Avatar" id="avatar_show" class="img-thumbnail" />
-    <div class="form-group">
+    <div class="form-group{{ $errors->has('avatar') ? ' has-error' : '' }}">
       <input style="margin: 0 auto !important" type="file" id="avatar" name="avatar">
+      @if ($errors->has('avatar'))
+          <span class="help-block">
+              <strong>{{ $errors->first('avatar') }}</strong>
+          </span>
+      @endif
       <br><button id="remove_button" type="button" class="hidden btn btn-danger btn-lg" style="width:250px;"><span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span> Pašalinti</button>
     </div>
   </div>

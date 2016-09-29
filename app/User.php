@@ -34,4 +34,13 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\EmailConfirm', 'email', 'email');
     }
+
+    public function user_information()
+    {
+        return $this->hasOne('App\UserInformation', 'id', 'information_fk');
+    }
+    public function Role()
+    {
+        return $this->hasOne('App\Role', 'id', 'role_fk');
+    }
 }
