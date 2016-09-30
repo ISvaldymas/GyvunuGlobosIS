@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use Illuminate\Support\Facades\Auth;
 use App\EmailConfirm;
+use App\User;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
@@ -18,17 +19,44 @@ class EmailConfirmController extends Controller
     {
         $email = $request->input('email');
         $email_check = EmailConfirm::where('email', $email)->first();
-
         if($token === $email_check->token && $email_check->state_fk != 1)
         {
+            $user = User::where('email', $email_check->email)->first();
             $email_check->state_fk = 1;
-            Auth::user()->state_fk = 2;
+            $user->state_fk = 2;
             $email_check->save();
-            Auth::user()->save();
+            $user->save();
+
+            if(Auth::check())
+            {
+                $message = "Elektroninis paštas(". $email . ") sėkmingai patvirtintas.";
+                Session::flash('succsess', $message);
+                return redirect('/registration');
+            }else
+            {
+                $message = "Elektroninis paštas(". $email . ") sėkmingai patvirtintas. Prisijunkite, kad pabaigtumėte registracija.";
+                Session::flash('succsess', $message);
+                return redirect('/');
+            }
         }
-        $message = "Elektroninis paštas(". $email . ") sėkmingai patvirtintas.";
-        Session::flash('succsess', $message);
-        return redirect('/registration');
+        else if(!($token === $email_check->token))
+        {
+            $message = "Neteisinga nuoroda.";
+            Session::flash('error', $message);
+            return redirect('/home');
+        }else if($email_check->state_fk == 1)
+        {
+            if(Auth::check())
+            {
+                $message = "Elektroninis paštas(". $email_check->email .") jau patvirtintas.";
+                Session::flash('warning', $message);
+                return redirect('/home'); 
+            }
+                $message = "Elektroninis paštas(". $email_check->email .") jau patvirtintas.";
+                Session::flash('warning', $message);
+                return redirect('/');
+        }
+        return redirect('/home');
     }
 
     public function resendConfirmEmail()

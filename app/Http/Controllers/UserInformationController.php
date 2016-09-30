@@ -29,12 +29,12 @@ class UserInformationController extends Controller
 	    $this -> validate($request, array(
 	        'name'          	 => 'required|max:50|min:5',
 	        'lastname'   		 => 'required|max:50|min:5',
-	         (int)$age_group_fk      => 'integer',
-	        'phone'      		 => 'required|max:20|min:9',
+	         (int)$age_group_fk  => 'integer',
+	        'phone'      		 => 'required|max:20|min:9|regex:/^(\+370)/',
 	        'adress'        	 => 'required|max:200|min:5',
-	        'age_group_fk'           => 'required',
-	         $newsletter_fk          => 'integer',
-                 'avatar'                => 'sometimes|image',
+	        'age_group_fk'       => 'required',
+	         $newsletter_fk      => 'integer',
+                 'avatar'        => 'sometimes|image',
 	    ));
 
         $UserInformation = new UserInformation;
