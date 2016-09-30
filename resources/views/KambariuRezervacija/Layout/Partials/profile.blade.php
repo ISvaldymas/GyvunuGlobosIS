@@ -18,12 +18,35 @@
                             </div>
                             <div class="profile-usertitle-job">
                                 {{ Auth::user()->email }}
+                                @if(Auth::user()->Role->id == 1)
+                                    <br/><font color="red">Administratorius</font>
+                                @endif
+                                    
+                                @if(Auth::user()->Role->id == 2)
+                                    <br/><font color="#f0ad4e">Darbuotojas</font>
+                                @endif
                             </div>
                         </div>
-                        <div class="profile-userbuttons">
-                            <button type="button" class="btn btn-success btn-sm">Rezervacijos <span class="badge">7</span></button>
-                            <button type="button" class="btn btn-primary btn-sm">Pranešimai <span class="badge">8</span></button>
-                        </div>
+                        <!--/ Administratorius -->
+                        @if(Auth::user()->Role->id == 1)
+                            <div class="profile-userbuttons">
+                                <button type="button" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Darbuotojai <span class="badge">7</span></button>
+                                <button type="button" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Klientai <span class="badge">8</span></button>
+                            </div>
+                        @endif
+                        <!--/ Darbuotojas -->
+                        @if(Auth::user()->Role->id == 2)
+                            <div class="profile-userbuttons">
+                                <button type="button" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Klientai <span class="badge">7</span></button>
+                                <button type="button" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> Rezervacijos <span class="badge">8</span></button>
+                            </div>
+                        @endif
+                        <!--/ Klientas -->
+                        @if(Auth::user()->Role->id == 3)
+                            <div class="profile-userbuttons">
+                                <button type="button" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> Rezervacijos <span class="badge">7</span></button>
+                            </div>
+                        @endif
                         <div class="profile-usermenu">
                             <ul class="nav">
                                 <li>
@@ -31,11 +54,38 @@
                                     <i class="glyphicon glyphicon-user"></i>
                                     Profilio nustatymai </a>
                                 </li>
-                                <li>
-                                    <a href="#">
-                                    <i class="glyphicon glyphicon-flag"></i>
-                                    Pagalba </a>
-                                </li>
+                                <!--/ Administartorius -->
+                                @if(Auth::user()->Role->id == 1)
+                                    <li>
+                                        <a href="#">
+                                        <i class="glyphicon glyphicon-bed"></i>
+                                        Kambariai </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                        <i class="glyphicon glyphicon-calendar"></i>
+                                        Rezervacijos </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                        <i class="glyphicon glyphicon-list"></i>
+                                        Ataskaitos </a>
+                                    </li>    
+                                    <li>
+                                        <a href="#">
+                                        <i class="glyphicon glyphicon-envelope"></i>
+                                        Pranešimai </a>
+                                    </li>
+                                @endif
+
+                                <!--/ Darbuotojas -->
+                                @if(Auth::user()->Role->id == 2)
+                                    <li>
+                                        <a href="#">
+                                        <i class="glyphicon glyphicon-list"></i>
+                                        Ataskaitos </a>
+                                    </li>
+                                @endif
                                 <li>
                                     <a href="{{ url('/logout') }}" style="color:red;">
                                     <i class="glyphicon glyphicon-log-out"></i>

@@ -27,6 +27,9 @@
                         <a href="#">Apie</a>
                     </li>
                    <li>
+                        <a href="#">Personalas</a>
+                    </li>
+                   <li>
                         <a href="#">Kontaktai</a>
                     </li>
                 </ul>
