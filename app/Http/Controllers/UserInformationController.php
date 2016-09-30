@@ -73,7 +73,15 @@ class UserInformationController extends Controller
 
     public function edit($id)
     {
-        return view('KambariuRezervacija.profile');
+        if(Auth::check() && $id == Auth::user()->id)
+        {
+            return view('KambariuRezervacija.profile')->with('data', AgeGroup::all());
+        }
+        else
+        {
+            return redirect('/home');
+        }
+        
     }
 
     public function update(Request $request, $id)

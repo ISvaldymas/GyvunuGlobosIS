@@ -40,8 +40,9 @@ MAIL_PORT=587<br>
 MAIL_USERNAME=kambariurezervacija@gmail.com<br>
 MAIL_PASSWORD=InformaciniaiPagrindai<br>
 MAIL_ENCRYPTION=tls<br>
-----------------------------
+
 Administratorius:<br>
+----------------------------
 email: admin@gmail.com<br>
 passw: admin123<br>
 <strong><p>Stenkitės kelti veikianti kodą ir rašyti tvarkingai, kad kitiem butų lengviau:)</p></strong>
