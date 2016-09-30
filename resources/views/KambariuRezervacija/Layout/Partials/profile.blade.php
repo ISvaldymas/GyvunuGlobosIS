@@ -7,9 +7,9 @@
                     <div class="profile-sidebar" style="">
                         <div class="profile-userpic">
                             @if(Auth::user()->user_information->photo_fk != 0)
-                                <img src="{{ Auth::user()->user_information->photo->url }}" class="img-responsive" alt="">
+                                <img src="/{{ Auth::user()->user_information->photo->url }}" class="img-responsive" alt="">
                             @else
-                                <img src="Style/Images/avatar.jpg" class="img-responsive" alt="">
+                                <img src="/Style/Images/avatar.jpg" class="img-responsive" alt="">
                             @endif
                         </div>
                         <div class="profile-usertitle">
@@ -50,7 +50,7 @@
                         <div class="profile-usermenu">
                             <ul class="nav">
                                 <li>
-                                    <a href="#">
+                                    <a href="{{ route('profile.edit', Auth::user()->id) }}">
                                     <i class="glyphicon glyphicon-user"></i>
                                     Profilio nustatymai </a>
                                 </li>

@@ -70,4 +70,14 @@ class UserInformationController extends Controller
         Session::flash('succsess', $message);
 		return redirect('/home');
 	} 
+
+    public function edit($id)
+    {
+        return view('KambariuRezervacija.profile');
+    }
+
+    public function update(Request $request, $id)
+    {
+
+    }
 }

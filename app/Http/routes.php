@@ -23,6 +23,16 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/registration', 'UserInformationController@registration');
 	Route::post('/registration/store', 'UserInformationController@store');
 	Route::get('/email/resend_confirm', 'Auth\EmailConfirmController@resendConfirmEmail');
+	//-------------------------------------------------------------------
+    Route::get('profile/{client}/edit', [
+        'uses' => 'UserInformationController@edit',
+        'as' => 'profile.edit'
+    ]);
+	Route::match(array('PUT', 'PATCH'), "profile/{client}", array(
+	      'uses' => 'UserInformationController@update',
+	      'as' => 'profile.update'
+	));
+    //-------------------------------------------------------------------
 
 });
 
