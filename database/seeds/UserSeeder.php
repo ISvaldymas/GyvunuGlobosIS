@@ -28,7 +28,7 @@ class UserSeeder extends Seeder
     				'name' 			=> 'Admin',
     				'lastname' 		=> 'Administrator',
     				'age_group_fk' 	=> 1,
-    				'phone' 		=> '860000000',
+    				'phone' 		=> '+37060000000',
     				'adress' 		=> 'Laisvės g. 24, Tauragė, Lietuva',
     				'newsletter_fk' => 0,
     				'photo_fk' 		=> 1,

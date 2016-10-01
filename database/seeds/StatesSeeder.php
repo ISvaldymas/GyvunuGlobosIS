@@ -11,7 +11,7 @@ class StatesSeeder extends Seeder
      */
     public function run()
     {
-        $states = ['Confirmed', 'Waiting', 'Denied'];
+        $states = ['Confirmed', 'Waiting', 'Denied', 'changed'];
         foreach ($states as $stat) {
             DB::table('states')->insert([
                 'name' => $stat,

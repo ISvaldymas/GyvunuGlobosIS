@@ -1,5 +1,6 @@
     jQuery(document).ready(function($) {
       function readURL(input) {
+        $old_img = $('#avatar_show').attr('src');
         if (input.files && input.files[0])
         {
           var reader = new FileReader();
@@ -16,6 +17,7 @@
 
       $( "#remove_button" ).click(function() {
         $('#avatar').val('');
-        $("#avatar_show").attr("src", "/Style/Images/avatar.jpg");
+        $("#avatar_show").attr("src", $old_img);
+        $("#remove_button").addClass("hidden");
       });
     });

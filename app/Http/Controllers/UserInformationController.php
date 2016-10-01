@@ -10,6 +10,9 @@ use App\UserInformation;
 use App\Photo;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Input;
 use Session;
 use Image;
 
@@ -73,6 +76,10 @@ class UserInformationController extends Controller
 
     public function edit($id)
     {
+       // if(Hash::check('admin123', Auth::user()->getAuthPassword()))
+       // $pass = Hash::make('admin123');
+       // $ck = Hash::check('admin123', $pass);
+
         if(Auth::check() && $id == Auth::user()->id)
         {
             return view('KambariuRezervacija.profile')->with('data', AgeGroup::all());
@@ -86,6 +93,36 @@ class UserInformationController extends Controller
 
     public function update(Request $request, $id)
     {
+        $age_group_fk = AgeGroup::where('name', $request->input('age_group_fk')) -> first()->id;
+        $newsletter_fk;
+        if($request->input('newsletter_fk')) $newsletter_fk=1; else $newsletter_fk=0;
 
+        $v = Validator::make($request->all(), [
+            'email'              => 'required|max:255|min:5|email',
+            'name'               => 'required|max:50|min:5',
+            'lastname'           => 'required|max:50|min:5',
+             (int)$age_group_fk  => 'integer',
+            'phone'              => 'required|max:20|min:9|regex:/^(\+370)/',
+            'adress'             => 'required|max:200|min:5',
+            'age_group_fk'       => 'required',
+             $newsletter_fk      => 'integer',
+                 'avatar'        => 'sometimes|image',
+            'new_password'       => 'sometimes|confirmed',
+        ]);
+        if($request->input('new_password') && !Hash::check($request->old_password, Auth::user()->getAuthPassword()))
+        {
+            $v->errors()->add('old_password', 'Senas slaptažodis klaidingas!');
+            return redirect()->back()->withErrors($v->errors());
+        }
+        if($v->fails())
+        {
+            return redirect()->back()->withErrors($v->errors());
+        }
+
+        //Patikrinti emaila:
+        //Jei pakeistas issiusti patvirtinima:
+        //Nustatyti busena:
+        //Pakeisti duomenis
+        //Viska issaugoti:
     }
 }
