@@ -23,7 +23,15 @@ class EmailConfirmController extends Controller
         {
             $user = User::where('email', $email_check->email)->first();
             $email_check->state_fk = 1;
-            $user->state_fk = 2;
+
+            if($user->state_fk == 4)
+            {
+                $user->state_fk = 1;
+            }else
+            {
+                $user->state_fk = 2;
+            }
+            
             $email_check->save();
             $user->save();
 

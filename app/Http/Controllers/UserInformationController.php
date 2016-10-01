@@ -8,11 +8,15 @@ use App\Http\Controllers\Controller;
 use App\AgeGroup;
 use App\UserInformation;
 use App\Photo;
+use App\User;
+use App\EmailConfirm;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Mail;
 use Session;
 use Image;
 
@@ -63,7 +67,7 @@ class UserInformationController extends Controller
         	$photo->size 	= $img->filesize();
         	$photo->cover 	= 1;
         	$photo->save();
-                $UserInformation -> photo_fk = $photo->id;
+            $UserInformation -> photo_fk = $photo->id;
         }
         $UserInformation -> save();
         Auth::user()->state_fk = 1;
@@ -76,13 +80,13 @@ class UserInformationController extends Controller
 
     public function edit($id)
     {
-       // if(Hash::check('admin123', Auth::user()->getAuthPassword()))
-       // $pass = Hash::make('admin123');
-       // $ck = Hash::check('admin123', $pass);
-
         if(Auth::check() && $id == Auth::user()->id)
         {
-            return view('KambariuRezervacija.profile')->with('data', AgeGroup::all());
+            $data = array(
+                'age_groupes'       => AgeGroup::all(),
+                'confirmed_emails'  => EmailConfirm::where('user_fk', Auth::user()->id)->get(),
+            );
+            return view('KambariuRezervacija.profile')->with('data', $data);
         }
         else
         {
@@ -96,8 +100,7 @@ class UserInformationController extends Controller
         $age_group_fk = AgeGroup::where('name', $request->input('age_group_fk')) -> first()->id;
         $newsletter_fk;
         if($request->input('newsletter_fk')) $newsletter_fk=1; else $newsletter_fk=0;
-
-        $v = Validator::make($request->all(), [
+            $this -> validate($request, array(
             'email'              => 'required|max:255|min:5|email',
             'name'               => 'required|max:50|min:5',
             'lastname'           => 'required|max:50|min:5',
@@ -108,21 +111,117 @@ class UserInformationController extends Controller
              $newsletter_fk      => 'integer',
                  'avatar'        => 'sometimes|image',
             'new_password'       => 'sometimes|confirmed',
-        ]);
-        if($request->input('new_password') && !Hash::check($request->old_password, Auth::user()->getAuthPassword()))
+        ));
+
+        $v = Validator::make($request->all(), []);
+        $user = User::find(Auth::user()->id);
+
+        if(!$request->has('old_password') && $request->has('new_password'))
         {
-            $v->errors()->add('old_password', 'Senas slaptažodis klaidingas!');
-            return redirect()->back()->withErrors($v->errors());
-        }
-        if($v->fails())
+            $v->errors()->add('old_password', 'Neįvestas senas slaptažodis.');
+            return redirect()->back()->withErrors($v->errors())->withInput();
+        }else if ($request->has('old_password') && !$request->has('new_password'))
         {
-            return redirect()->back()->withErrors($v->errors());
+            $v->errors()->add('new_password', 'Neįvestas naujas slaptažodis.');
+            return redirect()->back()->withErrors($v->errors())->withInput();
+        }else if($request->has('old_password') && $request->has('new_password') && $request->input('old_password') == $request->input('new_password')){
+            $v->errors()->add('new_password', 'Naujas ir senas slaptažodžiai negali būti vienodi.');
+            return redirect()->back()->withErrors($v->errors())->withInput();
+        }else if($request->has('old_password') && $request->has('new_password'))
+        {
+            if(!Hash::check($request->input('old_password'), Auth::user()->getAuthPassword()))
+            {
+                $v->errors()->add('old_password', 'Neteisingas senas slaptažodis.');
+                return redirect()->back()->withErrors($v->errors())->withInput();
+            }else
+            {
+                $user->password = Hash::make($request->input('new_password'));
+            }
         }
 
-        //Patikrinti emaila:
-        //Jei pakeistas issiusti patvirtinima:
-        //Nustatyti busena:
-        //Pakeisti duomenis
-        //Viska issaugoti:
+        //Patikrinti emaila:(naujas)
+        if(!EmailConfirm::where('email', $request->input('email'))->where('user_fk', Auth::user()->id)->first())
+        {
+            //patikrinti ar unikalus emailas:
+            if(EmailConfirm::where('email', $request->input('email'))->exists())
+            {
+                $v->errors()->add('email', 'El. paštas jau egzistuoja.');
+                return redirect()->back()->withErrors($v->errors())->withInput();
+            }else
+            {
+                $token = hash_hmac('sha256', uniqid(), Str::random(40));
+                $data = array(
+                    'user'  => Auth::user(),
+                    'token'  => $token,
+                    'email'  => $request->input('email'),
+                );
+                $new_email = new EmailConfirm;
+                $new_email->email = $request->input('email');
+                $new_email->token = $token;
+                $new_email->state_fk = 2;
+                $new_email->user_fk = Auth::user()->id;
+                $user->state_fk = 4;
+                $new_email->save();
+                $user->email = $request->input('email');
+                $user->save();
+
+                Mail::send('Auth.emails.confirm', $data, function ($message) use ($data){
+                    $message->from('kambariurezervacija@gmail.com', 'Informaciniai pagrindai');
+                    $message->to($data['email'])->subject('Kambarių rezervacija - el. pašto patvirtinimas:');
+                });
+
+            }
+        }else
+        {
+            //pakeisti senu:
+            return redirect('/senas');
+        }
+
+        //Pakeisti duomenis:
+        $information = UserInformation::find(Auth::user()->information_fk);
+
+        $information->name          = $request -> input('name');
+        $information->lastname      = $request -> input('lastname');
+        $information->age_group_fk  = $age_group_fk;
+        $information->phone         = $request -> input('phone');
+        $information->adress        = $request -> input('adress');
+        $information->newsletter_fk = $newsletter_fk;
+
+        if($request->hasFile('avatar')){
+            $avatar     = $request->file('avatar');
+            $ext        = $avatar->getClientOriginalExtension();
+            $filename   = time(). '.' . $ext;
+            $location   = public_path('database/users/' . Auth::user()->id . '/' . $filename);
+
+            //Patikrinti ar turi nuotrauka:
+            $photo;
+            if(Photo::where('id', Auth::user()->user_information->photo_fk)->exists())
+            {
+                $photo = Photo::find(Auth::user()->user_information->photo->id);
+            }else
+            {
+                $photo = new Photo;
+            }
+
+
+            if(!File::exists(public_path('database/users/' . Auth::user()->id))) {
+                File::makeDirectory(public_path('database/users/' . Auth::user()->id));
+            }else
+            {
+                File::delete(public_path($photo->url));
+            }
+
+            $img = Image::make($avatar)->resize(250, 250)->save($location);
+
+            $photo->url     = 'database/users/' . Auth::user()->id . '/' . $filename;
+            $photo->ext     = $ext;
+            $photo->size    = $img->filesize();
+            $photo->cover   = 1;
+            $photo->save();
+            $information -> photo_fk = $photo->id;
+        }
+        $information -> save();
+        $user->save();
+        return redirect('/home');
     }
 }

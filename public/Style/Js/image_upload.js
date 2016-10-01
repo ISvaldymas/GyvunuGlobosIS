@@ -20,4 +20,11 @@
         $("#avatar_show").attr("src", $old_img);
         $("#remove_button").addClass("hidden");
       });
+
+
+      //-------------
+
+      $( "#confirmed_email" ).change(function() {
+        $('#email').val($("#confirmed_email option:selected").text());
+      });
     });

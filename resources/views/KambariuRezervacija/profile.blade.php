@@ -1,5 +1,5 @@
 @extends('KambariuRezervacija.Layout.main')
-@section('title', ' Registracija(2)')
+@section('title', ' Profilis')
 @section('width') <div class="col-md-12"> @endsection
 @section('content')
 <form class="form" role="form" method="POST" action="{{ route('profile.update', Auth::user()->id) }}" accept-charset="UTF-8" id="profile_update_form" enctype="multipart/form-data">
@@ -30,7 +30,7 @@
       <div class="form-group{{ $errors->has('age_group_fk') ? ' has-error' : '' }}">
         <label for="age_group_fk">Amžiaus grupė</label>
           <select class="form-control" id="age_group_fk" name="age_group_fk" required>
-          @foreach($data as $age)
+          @foreach($data['age_groupes'] as $age)
             @if(old('age_group_fk'))
               @if($age->name == old('age_group_fk'))
                 <option selected>{{ $age->name }}</option>
@@ -70,7 +70,7 @@
               </span>
           @endif
       </div>
-      <div class="form-group{{ $errors->has('adress') ? ' has-error' : '' }}">
+      <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
         <label for="email">El. paštas</label>
         <input type="email" name="email" class="form-control" id="email" placeholder="{{ Auth::user()->email }}" value="{{ old('email') ? old('email') : Auth::user()->email }}" required>
           @if ($errors->has('email'))
@@ -79,10 +79,20 @@
               </span>
           @else
               <span class="help-block">
-                  <strong>Pakeitus el. paštą bus išsiunčiamas patvirtinimas.</strong>
+                  <strong>Pakeitus į naują el. paštą bus išsiunčiamas patvirtinimas.</strong>
               </span>
           @endif
       </div>
+          <p>Patvirtinti el. paštai:</p>
+          <select class="form-control" id="confirmed_email" name="confirmed_email">
+            @foreach($data['confirmed_emails'] as $c_email)
+              @if($c_email->email == Auth::user()->email)
+                <option selected >{{ $c_email->email }}</option>
+              @else
+                <option>{{ $c_email->email }}</option>
+              @endif
+            @endforeach
+          </select>
       <hr/>
       <div class="form-group{{ $errors->has('old_password') ? ' has-error' : '' }}">
         <label for="old_password">Senas slaptažodis</label>
