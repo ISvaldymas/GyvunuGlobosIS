@@ -163,7 +163,6 @@ class UserInformationController extends Controller
                 $user->state_fk = 4;
                 $new_email->save();
                 $user->email = $request->input('email');
-                $user->save();
 
                 Mail::send('Auth.emails.confirm', $data, function ($message) use ($data){
                     $message->from('kambariurezervacija@gmail.com', 'Informaciniai pagrindai');
@@ -173,8 +172,7 @@ class UserInformationController extends Controller
             }
         }else
         {
-            //pakeisti senu:
-            return redirect('/senas');
+            $user->email = $request->input('email');
         }
 
         //Pakeisti duomenis:
@@ -222,6 +220,8 @@ class UserInformationController extends Controller
         }
         $information -> save();
         $user->save();
-        return redirect('/home');
+        $message = "Informacija sėkmingai atnaujinta.";
+        Session::flash('succsess', $message);
+        return redirect()->back();
     }
 }

@@ -39,6 +39,10 @@ class EmailConfirmController extends Controller
             {
                 $message = "Elektroninis paštas(". $email . ") sėkmingai patvirtintas.";
                 Session::flash('succsess', $message);
+                if(Auth::user()->state->id == 1)
+                {
+                    return redirect('/home');
+                }
                 return redirect('/registration');
             }else
             {
@@ -73,6 +77,7 @@ class EmailConfirmController extends Controller
         $data = array(
             'user'  => Auth::user(),
             'token'  => $token,
+            'email'  => Auth::user()->email,
         );
         Mail::send('Auth.emails.confirm', $data, function ($message) {
             $message->from('kambariurezervacija@gmail.com', 'Informaciniai pagrindai');

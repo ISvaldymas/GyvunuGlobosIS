@@ -92,6 +92,7 @@ class AuthController extends Controller
         $data = array(
             'user'  => Auth::user(),
             'token'  => $token,
+            'email'  => Auth::user()->email,
         );
         Mail::send('Auth.emails.confirm', $data, function ($message) {
             $message->from('kambariurezervacija@gmail.com', 'Informaciniai pagrindai');
