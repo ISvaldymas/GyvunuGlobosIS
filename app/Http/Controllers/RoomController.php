@@ -123,7 +123,29 @@ class RoomController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // Validate the data
+        $this->validate($request,array(
+            'number'        => 'required|max:3|min:2',
+            'price'         => 'required|max:4|min:3',
+            'body'          => 'required|max:255|min:10',
+            'room_type_fk'  => 'required',
+            
+            ));
+
+        // Save to the database
+        $room = Room::find($id);
+
+        $room -> number       = $request -> input('number');
+        $room -> price        = $request -> input('price');
+        $room -> body         = $request -> input('body');
+        $room-> room_type_fk   = $request -> input('room_type_fk');
+
+          $room -> save();
+        //set flash data with success message
+          Session::flash('succsess', 'Informacija atnaujinta');
+        // redirect wth flash data to rooms.show
+          return redirect() -> route('rooms.show',$room->id);
+
     }
 
     /**
@@ -135,5 +157,11 @@ class RoomController extends Controller
     public function destroy($id)
     {
         //
+        $room = Room::find($id);
+
+        $room->delete();
+
+        Session::flash('succsess', 'Kambarys pašalintas');
+        return redirect()->route('rooms.index');
     }
 }

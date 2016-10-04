@@ -16,7 +16,7 @@
 
       <h1>Redaguoti kambario informaciją</h1>
       <hr>
-      {!! Form::model($data['room'], ['route' => ['rooms.update', $data['room']->id]] ) !!}
+      {!! Form::model($data['room'], ['route' => ['rooms.update', $data['room'] -> id], 'method'=>'PUT']) !!}
         {{ Form::label('number','Kambario numeris:') }}
         {{ Form::number('number',null, ["class" => 'form-control', 'required' => '','min' => '0','minlength' => '2', 'maxlength' => '3' ]) }}
         
@@ -38,7 +38,8 @@
          {!! Html::linkRoute('rooms.show', 'Atšaukti', array($data['room']->id), array('class' => 'btn btn-danger btn-block')) !!}
           </div>
           <div class="col-sm-6">
-            {!! Html::linkRoute('rooms.update', 'Išsaugoti', array($data['room']->id), array('class' => 'btn btn-success btn-block')) !!}
+            
+            {{  Form::submit('Pakeisti', array('class' => 'btn btn-success btn-block')) }}
           </div>
 
       {!! Form::close() !!}
@@ -56,6 +57,7 @@
               <strong>{{ $errors->first('avatar') }}</strong>
           </span>
       @endif
+      
       <br><button id="remove_button" type="button" class="hidden btn btn-danger btn-lg" style="width:250px;"><span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span> Pašalinti</button>
     </div>
   <br>

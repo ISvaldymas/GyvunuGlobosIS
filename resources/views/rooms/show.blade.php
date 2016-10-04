@@ -6,9 +6,7 @@
 
 @section('content')
 
-  <div class="col-md-12 alert alert-info text-center" role="alert">
-    <strong>Detali kambario informacija</strong> 
-  </div>
+
 
   <div class="row">
     <div class="col-md-10">
@@ -17,7 +15,13 @@
 
     <div class="col-md-2">
       <a href="{{ route('rooms.edit', $room->id) }}" class="btn btn-lg btn-block btn-primary btn-h1-spacing">Redaguoti</a>
-      <a href="{{ route('rooms.destroy', $room->id) }}" class="btn btn-lg btn-block btn-primary btn-h1-spacing">Naikinti</a>
+     {!! Form::open(['route' => ['rooms.destroy', $room->id], 'method' => 'DELETE'])!!}
+    
+
+      {!! Form::submit('Pašalinti', ['class' => 'btn btn-lg btn-block btn-primary btn-h1-spacing'])!!}
+
+       {!! Form::close() !!}
+     
     </div>
     <div class="col-md-12">
       <hr>
@@ -51,7 +55,7 @@
 
   </div>
   </div>
-        <td><a href="{{ route('rooms.edit', $room->id) }}" class="btn btn-primary btn-sm">Redaguoti</a></td>
+        <td><a href="{{ route('rooms.index', $room->id) }}" class="btn btn-primary btn-sm">Atgal</a></td>
 @endsection
 @section('scripts')
   <script src="/Style/Js/Image_upload.js"></script>
