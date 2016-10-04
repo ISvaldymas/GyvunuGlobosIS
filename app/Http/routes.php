@@ -10,7 +10,7 @@
 | and give it the controller to call when that URI is requested.
 |
 */
-
+Route::resource('rooms','RoomController');
 Route::group(['middleware' => 'guest'], function () {
 	//Only guests users may enter:
 	Route::get('/', 'PagesController@getIndex');
