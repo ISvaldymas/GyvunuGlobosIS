@@ -16,10 +16,10 @@
       <hr>
       {!! Form::open(array('route' => 'rooms.store', 'data-parsley-validate' =>'' )) !!}
         {{ Form::label('number','Kambario numeris:') }}
-        {{ Form::number('number',0, array('class' => 'form-control', 'required' => '','min' => '0','minlength' => '2', 'maxlength' => '3' )) }}
+        {{ Form::number('number',0, array('class' => 'form-control', 'required' => '')) }}
 
         {{ Form::label('price','Kaina:') }}
-        {{ Form::number('price','0', array('class' => 'form-control', 'required' => '','min' => '0','minlength' => '3', 'maxlength' => '4')) }}
+        {{ Form::number('price','0', array('class' => 'form-control', 'required' => '','min' => '0')) }}
 
         {{ Form::label('data','Kambario tipas:') }}
         <select class="form-control" name="room_type_fk">
@@ -29,7 +29,7 @@
             @else
               <option>{{ $type->name }}</option>
             @endif
-          @endforeach
+        @endforeach
           </select>
           @if ($errors->has('data'))
               <span class="help-block">

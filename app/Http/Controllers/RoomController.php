@@ -57,9 +57,9 @@ class RoomController extends Controller
         $room_type_fk = RoomType::where('name', $request->input('room_type_fk')) -> first()-> id;
         //validate the data
         $this->validate($request,array(
-            'number'        => 'required|max:3|min:2',
-            'price'         => 'required|max:4|min:3',
-            'body'          => 'required|max:255|min:10',
+            'number'        => 'required|max:3',
+            'price'         => 'required|max:4',
+            'body'          => 'required|max:255',
             'room_type_fk'  => 'required',
             
             ));
@@ -125,9 +125,9 @@ class RoomController extends Controller
     {
         // Validate the data
         $this->validate($request,array(
-            'number'        => 'required|max:3|min:2',
-            'price'         => 'required|max:4|min:3',
-            'body'          => 'required|max:255|min:10',
+            'number'        => 'required|max:3',
+            'price'         => 'required|max:4',
+            'body'          => 'required|max:255',
             'room_type_fk'  => 'required',
             
             ));
