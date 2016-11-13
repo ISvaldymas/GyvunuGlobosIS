@@ -39,17 +39,12 @@
   </div>
     <div class="col-md-6  ">
 
-    <img src="/Style/Images/room.jpg" width="450" height="450" alt="Avatar" id="avatar_show" class="img-thumbnail" />
-    <div class="form-group{{ $errors->has('avatar') ? ' has-error' : '' }}">
+    @if($room->photo_fk != NULL)
+        <img src="{{ asset($room->photo_fk) }}" width="250" height="250" alt="Avatar" id="avatar_show" class="img-thumbnail" />
+    @else
+        <img src="/Style/Images/avatar2.jpg" width="250" height="250" alt="Avatar" id="avatar_show" class="img-thumbnail" />
+    @endif
 
-	<button type="button" class="btn btn-default" aria-label="Left Align">
-	  <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-	</button>
-
-	<button type="button" class="btn btn-default">
-	  <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-	</button>
-    
  
     </div>
 

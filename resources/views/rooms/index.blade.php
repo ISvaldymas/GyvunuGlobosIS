@@ -36,7 +36,19 @@
           @foreach ($data['rooms'] as $room)
             
             <tr>
-               <td><img src="/Style/Images/room.jpg" width="150" height="150" alt="Avatar" id="avatar_show" class="img-thumbnail" /></td>
+           
+      @if($room->photo_fk != NULL)
+        <td><img src="{{ asset($room->photo_fk) }}" width="150" height="150" alt="Avatar" id="avatar_show" class="img-thumbnail" /></td>
+      @else
+        <td><img src="/Style/Images/avatar2.jpg" width="150" height="150" alt="Avatar" id="avatar_show" class="img-thumbnail" /></td>
+      @endif
+      <div class="form-group{{ $errors->has('avatar') ? ' has-error' : '' }}">
+      @if ($errors->has('avatar'))
+          <span class="help-block">
+              <strong>{{ $errors->first('avatar') }}</strong>
+          </span>
+      @endif</td>
+
               <td>{{ $room->types }}</td>
                <td>{{ $room->price }} eur.</td>
               <td>{{ substr($room->body, 0, 50) }}{{ strlen($room->body) > 50 ? "..." : "" }}</td>

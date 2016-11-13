@@ -3,12 +3,27 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-
 use App\Http\Requests;
+use App\Http\Controllers\Controller;
+use App\AgeGroup;
+use App\UserInformation;
+use App\Photo;
+use App\User;
+use App\EmailConfirm;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Mail;
+use Session;
+use Image;
+use Storage;
 use App\Room;
 use App\RoomType;
-use Session;
+
+
 
 class RoomController extends Controller
 {
@@ -61,6 +76,7 @@ class RoomController extends Controller
             'price'         => 'required|max:4',
             'body'          => 'required|max:255',
             'room_type_fk'  => 'required',
+            'room_image'        => 'sometimes|image'
             
             ));
 
@@ -72,6 +88,25 @@ class RoomController extends Controller
         $room -> body         = $request -> body;
         $room-> room_type_fk   = $room_type_fk;
           
+        //save image
+        if($request->hasFile('room_image')){
+            $room_image = $request->file('room_image');
+            $ext = $room_image->getClientOriginalExtension();
+            $filename = time(). '.' . $ext;
+            $location = public_path('database/rooms/'. $filename);
+            //File::makeDirectory(public_path('database/rooms/'));
+            $img = Image::make($room_image)->resize(250, 250)->save($location);
+
+            //database
+            $photo = new Photo;
+            $photo->url     = 'database/rooms/' . $filename;
+            $photo->ext     = $ext;
+            $photo->size    = $img->filesize();
+            $photo->cover   = 1;
+            $photo->save();
+            $room -> photo_fk = $photo->url;
+        }
+
         $room -> save();
 
         Session::flash('succsess', 'Naujas kambarys pridėtas.');
@@ -129,7 +164,7 @@ class RoomController extends Controller
             'price'         => 'required|max:4',
             'body'          => 'required|max:255',
             'room_type_fk'  => 'required',
-            
+            'room_image'    => 'image'
             ));
 
         // Save to the database
@@ -140,6 +175,25 @@ class RoomController extends Controller
         $room -> body         = $request -> input('body');
         $room-> room_type_fk   = $request -> input('room_type_fk');
 
+
+            $photo;
+            if($request->hasFile('room_image'))
+            {
+            $room_image = $request->file('room_image');
+            $ext = $room_image->getClientOriginalExtension();
+            $filename = time(). '.' . $ext;
+            $location = public_path('database/rooms/'. $filename);
+            //File::makeDirectory(public_path('database/rooms/'));
+            $img = Image::make($room_image)->resize(250, 250)->save($location);
+            $oldFilename = $room->photo_fk;
+            //update
+            $room->photo_fk = 'database/rooms/'. $filename;
+             //$room -> photo_fk = $img -> url;
+            //delete
+            File::delete(public_path($oldFilename));
+
+            }
+        
           $room -> save();
         //set flash data with success message
           Session::flash('succsess', 'Informacija atnaujinta');
@@ -154,12 +208,19 @@ class RoomController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id2)
     {
         //
-        $room = Room::find($id);
+        $room = Room::find($id2);
+        if($room->photo_fk != NULL){
 
-        $room->delete();
+        $id = Photo::where('url', $room->photo_fk) -> first() -> id;
+        $photo = Photo::find($id);
+        $photo -> delete();
+        File::delete(public_path($room->photo_fk));
+        $room->delete();    
+        }else{$room->delete(); }
+
 
         Session::flash('succsess', 'Kambarys pašalintas');
         return redirect()->route('rooms.index');

@@ -11,5 +11,9 @@ class Room extends Model
     {
         return $this->hasOne('App\RoomType', 'id','room_type_fk');
     }
+     public function photo()
+    {
+        return $this->hasOne('App\Photo', 'id', 'photo_fk');
+    }
 
 }

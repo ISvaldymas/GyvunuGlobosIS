@@ -20,7 +20,7 @@ class CreateRoomsTable extends Migration
             $table->string('price', 20);
             $table->text('body');
             
-            $table->integer('photo_fk')->nullable()->unsigned();
+            $table->string('photo_fk')->nullable()->unsigned();
             $table->timestamps();
         });
     }
