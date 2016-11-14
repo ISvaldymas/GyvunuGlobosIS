@@ -15,6 +15,8 @@ git add .<br>
 git status<br>
 git commit -m "New project"<br>
 git push -u origin master
+
+// git config --global core.safecrlf false (naikina git klaidos pranesimus)
 Laravel on windows:<br>
 ----------------------
 download and install xampp:    https://www.apachefriends.org/index.html<br>
