@@ -43,19 +43,25 @@
         <td><img src="/Style/Images/avatar2.jpg" width="150" height="150" alt="Avatar" id="avatar_show" class="img-thumbnail" /></td>
       @endif
       <div class="form-group{{ $errors->has('avatar') ? ' has-error' : '' }}">
-      @if ($errors->has('avatar'))
-          <span class="help-block">
-              <strong>{{ $errors->first('avatar') }}</strong>
-          </span>
-      @endif</td>
 
-              <td>{{ $room->types }}</td>
-               <td>{{ $room->price }} eur.</td>
+
+              @if($room->room_type_fk  == '0')
+              <td>Vienvietis</td>
+              @elseif($room->room_type_fk  == '1')
+               <td>Dvivietis</td>
+              @elseif($room->room_type_fk  == '2')
+               <td>Trivietis</td>
+              @elseif($room->room_type_fk  == '3')
+               <td>Keturvietis</td>
+              @endif
+
+
+              <td>{{ $room->price }} eur.</td>
               <td>{{ substr($room->body, 0, 50) }}{{ strlen($room->body) > 50 ? "..." : "" }}</td>
               
               <td><a href="{{ route('rooms.show', $room->id) }}" class="btn btn-default btn-sm">Plačiau</a> <a href="{{ route('rooms.edit', $room->id) }}" class="btn btn-default btn-sm">Redaguoti</a><a href="{{ route('rooms.destroy', $room->id) }}" class="btn btn-default btn-sm">Naikinti</a></td>
-            </tr>
-
+           
+          </tr>
           @endforeach
 
         </tbody>

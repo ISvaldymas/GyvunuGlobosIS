@@ -16,5 +16,6 @@ class DatabaseSeeder extends Seeder
         $this->call(AgeGroupSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(RoomTypeSeeder::class);
+         $this->call(RoomSeeder::class);
     }
 }

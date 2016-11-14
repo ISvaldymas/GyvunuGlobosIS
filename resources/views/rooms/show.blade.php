@@ -31,7 +31,15 @@
 <div class="col-md-12 well">
 	<div class="col-md-6 ">
 		<h2>Kambario numeris: <small>{{ $room->number }}</small></h2>
-		<h2>Kambario tipas: <small>{{ $room->room_type_fk }}</small></h2>
+		    @if($room->room_type_fk  == '0')
+    <h2>Kambario tipas: <small>Vienvietis</small></h2>
+    @elseif($room->room_type_fk  == '1')
+     <h2>Kambario tipas: <small>Dvivietis</small></h2>
+    @elseif($room->room_type_fk  == '2')
+     <h2>Kambario tipas: <small>Trivietis</small></h2>
+    @else
+     <h2>Kambario tipas: <small>Keturvietis</small></h2>
+     @endif
 		<h2>Kambario kaina: <small>{{ $room->price }} eur.</small></h2>
 		<h2>Kambario aprašymas: <small>{{ $room->body }}</small></h2>
 

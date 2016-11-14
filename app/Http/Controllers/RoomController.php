@@ -35,9 +35,9 @@ class RoomController extends Controller
     public function index()
     {
         //
-        //$rooms = Room::all();
-        $rooms = Room::rightJoin('room_types', 'room_types.id', '=', 'rooms.room_type_fk')
-        ->selectRaw('rooms.*, room_types.name as types')->get();
+        $rooms = Room::all();
+        //$rooms = Room::rightJoin('room_types', 'room_types.id', '=', 'rooms.room_type_fk')
+        //->selectRaw('rooms.*, room_types.name as types')->get();
 
         
         $data = array(

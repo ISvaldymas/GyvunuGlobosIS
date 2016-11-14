@@ -5,6 +5,6 @@ Homestead.yaml
 Homestead.json
 .env
 .idea
-public/database/rooms/*
+
 public/database/users/*
 !public/database/users/1
