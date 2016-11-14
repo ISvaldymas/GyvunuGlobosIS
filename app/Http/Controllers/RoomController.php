@@ -94,6 +94,7 @@ class RoomController extends Controller
             $ext = $room_image->getClientOriginalExtension();
             $filename = time(). '.' . $ext;
             $location = public_path('database/rooms/'. $filename);
+            File::isDirectory(public_path('database/rooms/')) or File::makeDirectory(public_path('database/rooms/'), 0777, true, true);
             //File::makeDirectory(public_path('database/rooms/'));
             $img = Image::make($room_image)->resize(250, 250)->save($location);
 
