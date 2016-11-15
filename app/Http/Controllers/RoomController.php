@@ -21,6 +21,7 @@ use Session;
 use Image;
 use Storage;
 use App\Room;
+use App\Rate;
 use App\RoomType;
 
 
@@ -214,7 +215,10 @@ class RoomController extends Controller
         //
         $room = Room::find($id2);
         if($room->photo_fk != NULL){
-
+       // $com=Rate::where('room_id',$room->id) -> first() -> id;
+        
+        //$comment=Rate::find($com);
+        //$comment->delete();
         $id = Photo::where('url', $room->photo_fk) -> first() -> id;
         $photo = Photo::find($id);
         $photo -> delete();

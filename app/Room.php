@@ -15,5 +15,9 @@ class Room extends Model
     {
         return $this->hasOne('App\Photo', 'id', 'photo_fk');
     }
+    public function rate()
+    {
+    	return $this->hasMany('App\Rate');
+    }
 
 }

@@ -52,9 +52,9 @@
          {{Form::file('room_image')}}
 
     @if($data['room']->photo_fk != NULL)
-        <img src="{{ asset($data['room']->photo_fk) }}" width="250" height="250" alt="Avatar" id="avatar_show" class="img-thumbnail" />
+        <img src="{{ asset($data['room']->photo_fk) }}" width="650" height="450" alt="Avatar" id="avatar_show" class="img-thumbnail" />
     @else
-        <img src="/Style/Images/avatar2.jpg" width="250" height="250" alt="Avatar" id="avatar_show" class="img-thumbnail" />
+        <img src="/Style/Images/avatar2.jpg" width="650" height="450" alt="Avatar" id="avatar_show" class="img-thumbnail" />
     @endif
     
       <br><button id="remove_button" type="button" class="hidden btn btn-danger btn-lg" style="width:250px;"><span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span> Pašalinti</button>
