@@ -19,5 +19,10 @@ class DatabaseSeeder extends Seeder
         $this->call(RoomSeeder::class);
         $this->call(StarsValueSeeder::class);
         $this->call(CommentSeeder::class);
+        $this->call(ActivitySeeder::class);
+        $this->call(ColorSeeder::class);
+        $this->call(DesignSeeder::class);
+        $this->call(MusicSeeder::class);
+        $this->call(ThemeSeeder::class);
     }
 }

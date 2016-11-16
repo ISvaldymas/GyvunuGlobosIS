@@ -18,6 +18,11 @@ Route::group(['middleware' => 'guest'], function () {
 	//Only guests users may enter:
 	Route::get('/', 'PagesController@getIndex');
 });
+
+Route::get('email', 'EmailController@index');
+Route::get('email', 'EmailController@create');
+Route::get('report', 'ReportController@Index');
+
 Route::auth();
 Route::get('/email/confirm/{token?}', 'Auth\EmailConfirmController@confirmEmail');
 Route::group(['middleware' => 'auth'], function () {

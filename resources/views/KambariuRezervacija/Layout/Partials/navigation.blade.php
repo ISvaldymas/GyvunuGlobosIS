@@ -21,7 +21,10 @@
                         <a href="{{ url('rooms') }}">Kambariai</a>
                     </li>
                     <li>
-                        <a href="#">Paslaugos</a>
+                        <a href="{{ url('email') }}">Paštas</a>
+                    </li>
+                    <li>
+                        <a href="{{ url('report') }}">Ataskaitos</a>
                     </li>
                     <li>
                         <a href="#">Apie</a>
