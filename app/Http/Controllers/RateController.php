@@ -21,6 +21,8 @@ use Illuminate\Support\Facades\Mail;
 
 use App\Room;
 use App\Rate;
+use App\RatedRooms;
+use App\StarsValue;
 use Session;
 
 class RateController extends Controller
@@ -53,10 +55,12 @@ class RateController extends Controller
      */
     public function store(Request $request, $room_id)
     {
+        $value_id = StarsValue::where('value', $request->input('value_id')) -> first()-> id;
         $this->validate($request, array(
             'name'      =>  'required|max:255',
             'email'     =>  'required|email|max:255',
-            'comment'   =>  'required|min:5|max:2000'
+            'comment'   =>  'required|min:5|max:2000',
+            'value_id'  => 'required'
             ));
 
         $room = Room::find($room_id);
@@ -65,14 +69,26 @@ class RateController extends Controller
         $comment->name = $request->name;
         $comment->email = $request->email;
         $comment->comment = $request->comment;
+         $comment->value_id = $request->value_id;
         $comment->approved = true;
         $comment->room()->associate($room);
 
         $comment->save();
 
+        $comment1 = Rate::find( $comment->id);        
+
+        //$fcomment = Rate::find($rate_id);
+
+        $rated = new RatedRooms();   
+        $rated->room()->associate($room);
+        $rated->rate()->associate($comment1);
+
+        $rated->save();
+
+
         Session::flash('success', 'Įvertinimas pridėtas');
 
-         return redirect() -> route('rooms.show',$room->id);
+        return redirect() -> route('rooms.show',$room->id);
     }
 
     /**

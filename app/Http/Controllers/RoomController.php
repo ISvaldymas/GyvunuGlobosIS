@@ -22,8 +22,9 @@ use Image;
 use Storage;
 use App\Room;
 use App\Rate;
+use App\RatedRooms;
 use App\RoomType;
-
+use App\StarsValue;
 
 
 class RoomController extends Controller
@@ -99,7 +100,7 @@ class RoomController extends Controller
             //File::makeDirectory(public_path('database/rooms/'));
             $img = Image::make($room_image)->resize(250, 250)->save($location);
 
-            //database
+        //Photo
             $photo = new Photo;
             $photo->url     = 'database/rooms/' . $filename;
             $photo->ext     = $ext;
@@ -108,6 +109,7 @@ class RoomController extends Controller
             $photo->save();
             $room -> photo_fk = $photo->url;
         }
+
 
         $room -> save();
 
@@ -127,8 +129,17 @@ class RoomController extends Controller
     public function show($id)
     {
         //
+        $room=Room::find($id);
+        $average=RatedRooms::where('room_id', $id) -> avg('rate_id');
         
-        return view('rooms.show')->with('room',Room::find($id));
+        //$average=RatedRooms::where('room_id', $id) -> count();
+        foreach(StarsValue::all() as $ct){$cat[]= $ct -> value;}
+            $data = array(
+                'room' => $room,
+                'cat' => $cat,
+                'average' => $average,
+            );
+        return view('rooms.show')->with('data',$data);
     }
 
     /**

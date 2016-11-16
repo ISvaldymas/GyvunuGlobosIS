@@ -12,7 +12,7 @@ class CreateStarsValueTable extends Migration
      */
     public function up()
     {
-        Schema::create('stars_value', function (Blueprint $table) {
+        Schema::create('stars_values', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('value')->nullable()->unsigned();
             $table->timestamps();
@@ -26,6 +26,6 @@ class CreateStarsValueTable extends Migration
      */
     public function down()
     {
-        Schema::drop('stars_value');
+        Schema::drop('stars_values');
     }
 }

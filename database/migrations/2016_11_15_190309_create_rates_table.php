@@ -17,6 +17,7 @@ class CreateRatesTable extends Migration
             $table->string('name');
             $table->string('email');
             $table->text('comment');
+            $table->integer('value_id')->nullable()->unsigned();
             $table->boolean('approved');
             $table->integer('room_id')->unsigned();
             $table->timestamps();
@@ -34,6 +35,7 @@ class CreateRatesTable extends Migration
     public function down()
     {
         Schema::dropForeign(['room_id']);
+        Schema::dropForeign(['value_id']);
         Schema::drop('rates');
     }
 }

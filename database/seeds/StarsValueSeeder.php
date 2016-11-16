@@ -13,7 +13,7 @@ class StarsValueSeeder extends Seeder
     {
         $groups = ['1', '2', '3', '4','5'];
         foreach ($groups as $group) {
-            DB::table('stars_value')->insert([
+            DB::table('stars_values')->insert([
                 'value' => $group,
                 'created_at' => new DateTime(),
                 'updated_at' => new DateTime()

@@ -6,8 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Rate extends Model
 {
-     public function room()
+    public function room()
     {
     	return $this->belongsTo('App\Room');
+    }
+	public function rated_rooms()
+    {
+        return $this->belongsTo('App\RatedRooms');
+    }
+    public function stars_values()
+    {
+        return $this->hasOne('App\StarsValue','value','value_id');
     }
 }
