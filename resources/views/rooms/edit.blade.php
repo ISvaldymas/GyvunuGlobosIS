@@ -48,16 +48,21 @@
     <div class="col-md-6  well">
     <h1>Kambario nuotrauka</h1>
     <hr>
-     {{Form::label('room_image','Atnaujinti nuotrauką')}}
-         {{Form::file('room_image')}}
-
     @if($data['room']->photo_fk != NULL)
         <img src="{{ asset($data['room']->photo_fk) }}" width="650" height="450" alt="Avatar" id="avatar_show" class="img-thumbnail" />
     @else
         <img src="/Style/Images/avatar2.jpg" width="650" height="450" alt="Avatar" id="avatar_show" class="img-thumbnail" />
     @endif
     
+      <div class="form-group{{ $errors->has('avatar') ? ' has-error' : '' }}">
+      <input style="margin: 0 auto !important" type="file" id="avatar" name="avatar">
+      @if ($errors->has('avatar'))
+          <span class="help-block">
+              <strong>{{ $errors->first('avatar') }}</strong>
+          </span>
+      @endif
       <br><button id="remove_button" type="button" class="hidden btn btn-danger btn-lg" style="width:250px;"><span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span> Pašalinti</button>
+    </div>
     </div>
      {!! Form::close() !!}
   <br>

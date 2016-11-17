@@ -25,6 +25,7 @@ use App\Rate;
 use App\RatedRooms;
 use App\RoomType;
 use App\StarsValue;
+use App\Amenities;
 
 
 class RoomController extends Controller
@@ -36,15 +37,9 @@ class RoomController extends Controller
      */
     public function index()
     {
-        //
         $rooms = Room::all();
-        //$rooms = Room::rightJoin('room_types', 'room_types.id', '=', 'rooms.room_type_fk')
-        //->selectRaw('rooms.*, room_types.name as types')->get();
-
-        
         $data = array(
             'rooms' => $rooms,
-           // 'types' => $types,
             'count'    => Room::count(),
         );
    
@@ -58,9 +53,13 @@ class RoomController extends Controller
      */
     public function create()
     {
-        //
-       
-        return view('rooms.create')->with('data', RoomType::all());
+        foreach(RoomType::all() as $ce){$room[]= $ce -> name;}
+        foreach(Amenities::all() as $ct){$cat[]= $ct -> name;}
+            $data = array(
+                'room' => $room,
+                'cat' => $cat,
+            );
+        return view('rooms.create')->with('data', $data);
     }
 
     /**
@@ -71,7 +70,7 @@ class RoomController extends Controller
      */
     public function store(Request $request)
     {
-        $room_type_fk = RoomType::where('name', $request->input('room_type_fk')) -> first()-> id;
+        //$room_type_fk = RoomType::where('name', $request->input('room_type_fk')) -> first()-> id;
         //validate the data
         $this->validate($request,array(
             'number'        => 'required|max:3',
@@ -88,11 +87,11 @@ class RoomController extends Controller
         $room -> number       = $request -> number;
         $room -> price        = $request -> price;
         $room -> body         = $request -> body;
-        $room-> room_type_fk   = $room_type_fk;
+        $room-> room_type_fk   = $request -> room_type_fk;
           
         //save image
-        if($request->hasFile('room_image')){
-            $room_image = $request->file('room_image');
+        if($request->hasFile('avatar')){
+            $room_image = $request->file('avatar');
             $ext = $room_image->getClientOriginalExtension();
             $filename = time(). '.' . $ext;
             $location = public_path('database/rooms/'. $filename);
@@ -109,15 +108,11 @@ class RoomController extends Controller
             $photo->save();
             $room -> photo_fk = $photo->url;
         }
-
-
         $room -> save();
 
         Session::flash('succsess', 'Naujas kambarys pridėtas.');
         //redirect to another page
-        return redirect() -> route('rooms.show',$room->id);
-
-             
+        return redirect() -> route('rooms.show',$room->id);          
         }
 
     /**
@@ -154,7 +149,6 @@ class RoomController extends Controller
         $room = Room::find($id);
          $cat = array();
         foreach(RoomType::all() as $ct){$cat[]= $ct -> name;}
-
             $data = array(
                 'room' => $room,
                 'cat' => $cat,
@@ -190,9 +184,9 @@ class RoomController extends Controller
 
 
             $photo;
-            if($request->hasFile('room_image'))
+            if($request->hasFile('avatar'))
             {
-            $room_image = $request->file('room_image');
+            $room_image = $request->file('avatar');
             $ext = $room_image->getClientOriginalExtension();
             $filename = time(). '.' . $ext;
             $location = public_path('database/rooms/'. $filename);

@@ -10,17 +10,14 @@
 
   <div class="row">
     <div class="col-md-10">
-      <h1>Kambariai</h1>
+      <h1>Kambarys</h1>
     </div>
 
     <div class="col-md-2">
       <a href="{{ route('rooms.edit', $data['room'] -> id) }}" class="btn btn-lg btn-block btn-primary btn-h1-spacing">Redaguoti</a>
      {!! Form::open(['route' => ['rooms.destroy', $data['room'] -> id], 'method' => 'DELETE'])!!}
-    
-
-      {!! Form::submit('Pašalinti', ['class' => 'btn btn-lg btn-block btn-primary btn-h1-spacing','style' => 'margin-top:15px;'])!!}
-
-  {!! Form::close() !!}
+     {!! Form::submit('Pašalinti', ['class' => 'btn btn-lg btn-block btn-primary btn-h1-spacing','style' => 'margin-top:15px;'])!!}
+     {!! Form::close() !!}
      
     </div>
     <div class="col-md-12">

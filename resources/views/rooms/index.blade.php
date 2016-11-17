@@ -14,6 +14,7 @@
 
     <div class="col-md-2">
       <a href="{{ route('rooms.create') }}" class="btn btn-lg btn-block btn-primary btn-h1-spacing">Pridėti kambarį</a>
+      <a href="{{ route('amenities.create') }}" class="btn btn-lg btn-block btn-primary btn-h1-spacing">Pridėti patogumus</a>
     </div>
     <div class="col-md-12">
       <hr>
@@ -59,7 +60,7 @@
               <td>{{ $room->price }} eur.</td>
               <td>{{ substr($room->body, 0, 50) }}{{ strlen($room->body) > 50 ? "..." : "" }}</td>
               
-              <td><a href="{{ route('rooms.show', $room->id) }}" class="btn btn-default btn-sm">Plačiau</a> <a href="{{ route('rooms.edit', $room->id) }}" class="btn btn-default btn-sm">Redaguoti</a><a href="{{ route('rooms.destroy', $room->id) }}" class="btn btn-default btn-sm">Naikinti</a></td>
+              <td><a href="{{ route('rooms.show', $room->id) }}" class="btn btn-primary btn-sm" style="float: right;">Plačiau</a> <a href="{{ route('rooms.edit', $room->id) }}" class="btn btn-primary btn-sm" style="float: right;">Redaguoti</a><a href="{{ route('rooms.destroy', $room->id) }}" class="btn btn-primary btn-sm " style="float: right;">Naikinti</a></td>
            
           </tr>
           @endforeach

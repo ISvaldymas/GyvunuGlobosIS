@@ -11,6 +11,8 @@
 |
 */
 Route::resource('rooms','RoomController');
+Route::resource('amenities','AmenitiesController');
+
 Route::post('rooms/{room_id}', [
 	'uses' => 'RateController@store',
 	'as' => 'rate.store']);
