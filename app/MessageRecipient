@@ -1,0 +1,38 @@
+<?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class MessageRecipient extends Model
+{
+    public function user()
+    {
+        return $this->belongsTo('App\User', 'user_fk', 'id');
+    }
+    public function photo()
+    {
+        return $this->hasOne('App\Photo', 'id', 'photo_fk');
+    }
+    public function age_group()
+    {
+        return $this->hasOne('App\AgeGroup', 'id', 'age_group_fk');
+    }
+
+        public function room_type()
+    {
+        return $this->hasOne('App\RoomType', 'id','room_type_fk');
+    }
+     public function photo()
+    {
+        return $this->hasOne('App\Photo', 'id', 'photo_fk');
+    }
+    public function rate()
+    {
+        return $this->hasMany('App\Rate');
+    }
+        public function amenities()
+    {
+        return $this->hasMany('App\Amenities');
+    }
+}
