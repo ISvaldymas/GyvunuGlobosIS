@@ -40,9 +40,13 @@ Route::group(['middleware' => 'auth'], function () {
 	      'as' => 'profile.update'
 	));
     //-------------------------------------------------------------------
-	    
-	Route::get('email', 'EmailController@index');
-	Route::get('email', 'EmailController@create');
+    Route::resource('email','EmailController');
+
+	Route::post('email/{email_id}', [
+	'uses' => 'EmailController@store',
+	'as' => 'email.store']);
+
+	Route::get('email', 'EmailController@show');
 	Route::get('contact', 'EmailController@getContact');
 	Route::post('contact', 'EmailController@postContact');
 	Route::get('report', 'ReportController@Index');

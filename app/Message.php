@@ -12,12 +12,12 @@ class Message extends Model
      * @var array
      */
     protected $fillable = [
-        'message_body', 'subject',
+        'bodyMessage', 'subject', 'email',
     ];
 
     //Kardinalumai
     public function message_recipient()
     {
-        return $this->hasMany('App\MessageRecipient', 'id', 'message_id_fk');
+        return $this->hasMany('App\Userinformation', 'id', 'user_email_fk');
     }
 }

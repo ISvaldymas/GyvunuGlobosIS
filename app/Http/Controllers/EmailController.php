@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Session;
 use App\Http\Requests;
+use App\Message;
+use App\User;
 use Illuminate\Support\Facades\Mail;
 
 class EmailController extends Controller
@@ -16,7 +18,7 @@ class EmailController extends Controller
      */
     public function index()
     {
-          return view('email.index');
+        //
     }
 
      /**
@@ -24,9 +26,15 @@ class EmailController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function show()
     {  
-        return view('email.create');
+       //$message = Message::all();
+       // $data = array(
+       //     'message' => $message,
+       //     'count'    => Room::count(),
+       // );
+       //   return view('email.show')->with('data', $data);
+        return view('email.show');
     }
 
     public function getContact()
@@ -35,16 +43,17 @@ class EmailController extends Controller
     }
 
     public function postContact(Request $request) {
-        $this->validate($request, [
+        $this->validate($request, array(
             'email' => 'required|email',
             'subject' => 'min:3',
-            'message' => 'min:10']);
+            'message' => 'min:10'));
 
         $data = array(
             'email' => $request->email,
             'subject' => $request->subject,
             'bodyMessage' => $request->message
             );
+
 
         Mail::send('email.contact', $data, function($message) use ($data){
             $message->from('kambariurezervacija@gmail.com', 'Informaciniai pagrindai');
@@ -53,6 +62,35 @@ class EmailController extends Controller
         });
         $message = "Žinutė gavėjui (". $data['email'] .") išsiųsta sėkmingai!.";
         Session::flash('succsess', $message);
-        return redirect('/home');
+        return view('email.show')->with('data', $data);
     }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        //$room_type_fk = RoomType::where('name', $request->input('room_type_fk')) -> first()-> id;
+        //validate the data
+        $this->validate($request,array(
+            'email'        => 'required|email',
+            'subject'      => 'required|min:3',
+            'bodyMessage'  => 'required|min:10'
+            
+            ));
+
+        // store in the database
+        $message = new Message;
+
+        $message -> email       = $request -> email;
+        $message -> subject     = $request -> subject;
+        $message -> bodyMessage = $request -> bodyMessage;
+
+        $message -> save();
+        //redirect to another page
+        return redirect() -> route('email.show', $message->id);          
+        }
 }
