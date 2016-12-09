@@ -1,62 +1,36 @@
 @extends('KambariuRezervacija.Layout.main')
 
-@section('title','|Visi kambariai')
+@section('title','|Peržiūrėti pranešimo turinį')
 
 @section('width') <div class="col-md-12"> @endsection
 
 @section('content')
 
-            <div class="col-md-6 well ">
-                <h1>Kurti naują pranešimą</h1>
-                <hr>
-                <form action="{{ url('contact') }}" method="POST">
-                    {{ csrf_field() }}
-                    <div class="form-group">
-                        <label name="email">Adresatas:</label>
-                        <input id="email" name="email" class="form-control">
-                    </div>
 
-                    <div class="form-group">
-                        <label name="subject">Tema:</label>
-                        <input id="subject" name="subject" class="form-control">
-                    </div>
-
-                    <div class="form-group">
-                        <label name="message">Žinutė:</label>
-                        <textarea id="message" name="message" class="form-control">...</textarea>
-                    </div>
-
-                    <input type="submit" value="Siųsti" class="btn btn-success">
-                </form>
-            </div>
-
-         <div class="col-md-6 well">
-                <h1>Visi išsiųsti laiškai</h1>
-                <hr>
-
-  </div> <!-- end of .row -->
 
   <div class="row">
-    <div class="col-md-6">
-      <table class="table">
-        <thead>
-          <th>Tema</th>
-          <th>Gavėjo email</th>
-          <th>Data</th>
-          <th>Laiško turinys </th>
-        </thead>
-        <tbody>
-       <!-- foreach ciklas -->
-        <tr>
-        <td>Kvietimas</td>
-        <td>sandra.klezyte4@gmail.com</td>
-        <td>2016-11-25</td>
-        <td><a href="" class="btn btn-primary btn-sm" style="float: right;">Plačiau</a></td>
-        </tr>
-         <!-- foreach ciklo pabaiga -->
-        </tbody>
-      </table>
+    <div class="col-md-10">
+      <h1>Pranešimas</h1>
     </div>
+      <div class="col-md-2">
+    <div class="col-md-12">
+      <hr>
+    </div>
+  </div> <!-- end of .row -->
+
+
+  <div class="col-md-10 well">
+      <h1>Pranešimo turinys</h1>
+      <hr>
+    <h3>Tema: <small>{{ $data['mes']->subject }}</small></h3>
+    <h3>Gavėjo email: <small>{{ $data['mes']->email }}</small></h3>
+
+     <h3>Išsiuntimo data: <small>{{ $data['mes']->created_at }}</small></h3>
+
+     <h3>Laiško turinys: <small>{{ $data['mes']->bodyMessage }}</small></h3>
+ 
+        <td><a href="{{ route('email.index') }}" class="btn btn-primary btn-sm" style="float: right;">Atgal</a>
+        </td>
+         </div>
   </div>
- </div> 
 @endsection

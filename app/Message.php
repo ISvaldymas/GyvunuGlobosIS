@@ -15,9 +15,11 @@ class Message extends Model
         'bodyMessage', 'subject', 'email',
     ];
 
-    //Kardinalumai
-    public function message_recipient()
-    {
-        return $this->hasMany('App\Userinformation', 'id', 'user_email_fk');
-    }
+    public $table = "message";
+
+    // public function recipient()
+    // {
+    //     return $this->hasOne('App\Userinformation', 'email', 'recipient_fk');
+    // }
+
 }

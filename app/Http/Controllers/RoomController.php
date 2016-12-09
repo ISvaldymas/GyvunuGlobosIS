@@ -75,7 +75,7 @@ class RoomController extends Controller
         $this->validate($request,array(
             'number'        => 'required|max:3',
             'price'         => 'required|max:4',
-            'body'          => 'required|max:255',
+            'body'          => 'required',
             'room_type_fk'  => 'required',
             'room_image'        => 'sometimes|image'
             
@@ -169,7 +169,7 @@ class RoomController extends Controller
         $this->validate($request,array(
             'number'        => 'required|max:3',
             'price'         => 'required|max:4',
-            'body'          => 'required|max:255',
+            'body'          => 'required',
             'room_type_fk'  => 'required',
             'room_image'    => 'image'
             ));

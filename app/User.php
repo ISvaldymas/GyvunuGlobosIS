@@ -35,6 +35,11 @@ class User extends Authenticatable
         return $this->hasOne('App\EmailConfirm', 'email', 'email');
     }
 
+    // public function recipient()
+    // {
+    //     return $this->belongsTo('App\Message', 'recipient_fk', 'email');
+    // }
+
     public function user_information()
     {
         return $this->hasOne('App\UserInformation', 'id', 'information_fk');

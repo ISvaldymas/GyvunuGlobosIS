@@ -41,15 +41,10 @@ Route::group(['middleware' => 'auth'], function () {
 	));
     //-------------------------------------------------------------------
     Route::resource('email','EmailController');
-
-	Route::post('email/{email_id}', [
-	'uses' => 'EmailController@store',
-	'as' => 'email.store']);
-
-	Route::get('email', 'EmailController@show');
 	Route::get('contact', 'EmailController@getContact');
 	Route::post('contact', 'EmailController@postContact');
-	Route::get('report', 'ReportController@Index');
+	Route::post('email/store', 'EmailController@store');
+	Route::get('report', 'ReportController@index');
 
 });
 

@@ -18,7 +18,12 @@ class EmailController extends Controller
      */
     public function index()
     {
-        //
+        $message = Message::all();
+        $data = array(
+             'message' => $message,
+             'count'    => Message::count(),
+         );
+          return view('email.index')->with('data', $data);
     }
 
      /**
@@ -26,17 +31,20 @@ class EmailController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function show()
+    public function show($id)
     {  
-       //$message = Message::all();
-       // $data = array(
-       //     'message' => $message,
-       //     'count'    => Room::count(),
-       // );
-       //   return view('email.show')->with('data', $data);
-        return view('email.show');
+        $mes=Message::find($id);
+            $data = array(
+                'mes' => $mes,
+            );
+        return view('email.show')->with('data', $data);
     }
 
+     /**
+     * Send emails
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function getContact()
     {  
         return view('email.contact');
@@ -51,7 +59,7 @@ class EmailController extends Controller
         $data = array(
             'email' => $request->email,
             'subject' => $request->subject,
-            'bodyMessage' => $request->message
+            'bodyMessage' => $request->message,
             );
 
 
@@ -62,8 +70,27 @@ class EmailController extends Controller
         });
         $message = "Žinutė gavėjui (". $data['email'] .") išsiųsta sėkmingai!.";
         Session::flash('succsess', $message);
-        return view('email.show')->with('data', $data);
+
+        // // store in the database
+         $message = new Message;
+
+         $message -> email       = $request -> email;
+         $message -> subject     = $request -> subject;
+         $message -> bodyMessage = $request -> message;
+
+         $message -> save();
+        // //redirect to another page
+         return redirect() -> route('email.index', $message->id);   
+
+        return view('email.index')->with('data', $data);
     }
+
+
+    public function create()
+    {
+
+    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -72,25 +99,47 @@ class EmailController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
+    {  
+         
+    }
+
+
+     /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
     {
-        //$room_type_fk = RoomType::where('name', $request->input('room_type_fk')) -> first()-> id;
-        //validate the data
-        $this->validate($request,array(
-            'email'        => 'required|email',
-            'subject'      => 'required|min:3',
-            'bodyMessage'  => 'required|min:10'
-            
-            ));
+        
+    }
 
-        // store in the database
-        $message = new Message;
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
 
-        $message -> email       = $request -> email;
-        $message -> subject     = $request -> subject;
-        $message -> bodyMessage = $request -> bodyMessage;
+    }
 
-        $message -> save();
-        //redirect to another page
-        return redirect() -> route('email.show', $message->id);          
-        }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id2)
+    {
+        // $message = message::find($id2);
+        // $message->delete();
+
+        // Session::flash('succsess', 'Pranešimas pašalintas');
+        // return redirect()->route('email.index');
+    }
 }
