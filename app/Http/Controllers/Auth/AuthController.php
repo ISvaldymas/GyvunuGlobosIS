@@ -115,10 +115,13 @@ class AuthController extends Controller
         $email_confirm->email = $user->email;
         $email_confirm->token = $token;
         $email_confirm->user_fk = $user->id;
-        if(Auth::check() && Auth::user()->Role->id == 1){ $email_confirm->state_fk = 1; }
+
+
+
+        if(Auth::check() && Auth::user()->role_fk == 1){ $email_confirm->state_fk = 1; }
         $email_confirm -> save();
 
-        if(Auth::check() && Auth::user()->Role->id == 1){ return redirect()->route('staff.edit', $user->id); }
+        if(Auth::check() && Auth::user()->role_fk == 1){ return redirect()->route('staff.edit', $user->id); }
 
         return response()->json([
             'state' => 'succses'

@@ -69,6 +69,8 @@
                     console.log(data.status + " succsess" + data + " / " + JSON.stringify(data));
                 },
                 error   : function(data){
+                    console.log('Serverio klaida');
+                    console.log(data.status + " error " + data + " / " + JSON.stringify(data));
                     $("#reg_error").html("<strong>Klaida: </strong>" + data['responseJSON']['email'] + "<br>" + data['responseJSON']['password']);
                     $("#reg_error").removeAttr("hidden");
 
@@ -82,9 +84,6 @@
                         $("#reg_conf_pasw").addClass("has-error");
                     }
                     submit.button('reset');
-
-                    console.log('Serverio klaida');
-                    console.log(data.status + " error " + data + " / " + JSON.stringify(data));
                 }
             });
             
