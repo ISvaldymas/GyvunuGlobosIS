@@ -30,14 +30,13 @@
                         <!--/ Administratorius -->
                         @if(Auth::user()->Role->id == 1)
                             <div class="profile-userbuttons">
-                                <button type="button" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Darbuotojai <span class="badge">7</span></button>
-                                <button type="button" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Klientai <span class="badge">8</span></button>
+                            <a class="btn btn-success btn-sm" href="{{ route('staff.index') }}" role="button"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Darbuotojai</a>
                             </div>
                         @endif
                         <!--/ Darbuotojas -->
                         @if(Auth::user()->Role->id == 2)
                             <div class="profile-userbuttons">
-                                <button type="button" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Klientai <span class="badge">7</span></button>
+                                <button type="button" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Klientai</button>
                                 <button type="button" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> Rezervacijos <span class="badge">8</span></button>
                             </div>
                         @endif
@@ -52,7 +51,7 @@
                                 <li>
                                     <a href="{{ route('profile.edit', Auth::user()->id) }}">
                                     <i class="glyphicon glyphicon-user"></i>
-                                    Profilio nustatymai </a>
+                                    Profilis </a>
                                 </li>
                                 <!--/ Administartorius -->
                                 @if(Auth::user()->Role->id == 1)

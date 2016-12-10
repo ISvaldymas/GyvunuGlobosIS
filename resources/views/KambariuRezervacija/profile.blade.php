@@ -2,7 +2,7 @@
 @section('title', ' Profilis')
 @section('width') <div class="col-md-12"> @endsection
 @section('content')
-<form class="form" role="form" method="POST" action="{{ route('profile.update', Auth::user()->id) }}" accept-charset="UTF-8" id="profile_update_form" enctype="multipart/form-data">
+<form class="form" role="form" method="POST" action="{{ route('profile.update', $data['user']->id) }}" accept-charset="UTF-8" id="profile_update_form" enctype="multipart/form-data">
 <input name="_method" type="hidden" value="PUT">
   {{ csrf_field() }}
   <div class="col-md-12 alert alert-info text-center" role="alert">
@@ -11,7 +11,7 @@
   <div class="col-md-6 well">
       <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
         <label for="name">Vardas</label>
-        <input type="text" name="name" class="form-control" id="name" placeholder="{{ Auth::user()->user_information->name }}" value="{{ old('name') ? old('name') : Auth::user()->user_information->name }}" required>
+        <input type="text" name="name" class="form-control" id="name" placeholder="{{ $data['user']->user_information->name }}" value="{{ old('name') ? old('name') : $data['user']->user_information->name }}" required>
         @if ($errors->has('name'))
             <span class="help-block">
                 <strong>{{ $errors->first('name') }}</strong>
@@ -20,7 +20,7 @@
       </div>
       <div class="form-group{{ $errors->has('lastname') ? ' has-error' : '' }}">
         <label for="lastname">Pavardė</label>
-        <input type="text" class="form-control" name="lastname" id="lastname" placeholder="{{ Auth::user()->user_information->lastname }}" value="{{ old('lastname') ? old('lastname') : Auth::user()->user_information->lastname }}" required>
+        <input type="text" class="form-control" name="lastname" id="lastname" placeholder="{{ $data['user']->user_information->lastname }}" value="{{ old('lastname') ? old('lastname') : $data['user']->user_information->lastname }}" required>
         @if ($errors->has('lastname'))
             <span class="help-block">
                 <strong>{{ $errors->first('lastname') }}</strong>
@@ -38,7 +38,7 @@
                 <option>{{ $age->name }}</option>
               @endif
             @else
-              @if($age->name == Auth::user()->user_information->age_group->name)
+              @if($age->name == $data['user']->user_information->age_group->name)
                 <option selected>{{ $age->name }}</option>
               @else
                 <option>{{ $age->name }}</option>
@@ -54,7 +54,7 @@
       </div>
       <div class="form-group{{ $errors->has('phone') ? ' has-error' : '' }}">
         <label for="phone">Telefonas</label>
-        <input type="text" class="form-control" id="phone" placeholder="{{ Auth::user()->user_information->phone }}" name="phone" value="{{ old('phone') ? old('phone') : Auth::user()->user_information->phone }}" required>
+        <input type="text" class="form-control" id="phone" placeholder="{{ $data['user']->user_information->phone }}" name="phone" value="{{ old('phone') ? old('phone') : $data['user']->user_information->phone }}" required>
           @if ($errors->has('phone'))
               <span class="help-block">
                   <strong>{{ $errors->first('phone') }}</strong>
@@ -63,7 +63,7 @@
       </div>
       <div class="form-group{{ $errors->has('adress') ? ' has-error' : '' }}">
         <label for="adress">Adresas</label>
-        <input type="text" name="adress" class="form-control" id="adress" placeholder="{{ Auth::user()->user_information->adress }}" value="{{ old('adress') ? old('adress') : Auth::user()->user_information->adress }}" required>
+        <input type="text" name="adress" class="form-control" id="adress" placeholder="{{ $data['user']->user_information->adress }}" value="{{ old('adress') ? old('adress') : $data['user']->user_information->adress }}" required>
           @if ($errors->has('adress'))
               <span class="help-block">
                   <strong>{{ $errors->first('adress') }}</strong>
@@ -72,7 +72,7 @@
       </div>
       <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
         <label for="email">El. paštas</label>
-        <input type="email" name="email" class="form-control" id="email" placeholder="{{ Auth::user()->email }}" value="{{ old('email') ? old('email') : Auth::user()->email }}" required>
+        <input type="email" name="email" class="form-control" id="email" placeholder="{{ $data['user']->email }}" value="{{ old('email') ? old('email') : $data['user']->email }}" required>
           @if ($errors->has('email'))
               <span class="help-block">
                   <strong>{{ $errors->first('email') }}</strong>
@@ -86,7 +86,7 @@
           <p>Patvirtinti el. paštai:</p>
           <select class="form-control" id="confirmed_email" name="confirmed_email">
             @foreach($data['confirmed_emails'] as $c_email)
-              @if($c_email->email == Auth::user()->email)
+              @if($c_email->email == $data['user']->email)
                 <option selected >{{ $c_email->email }}</option>
               @else
                 <option>{{ $c_email->email }}</option>
@@ -126,7 +126,7 @@
         <label>
           @if(old('newsletter_fk')==true)
             <input type="checkbox" checked name="newsletter_fk" id="newsletter_fk">
-          @elseif(Auth::user()->user_information->newsletter_fk == 1)
+          @elseif($data['user']->user_information->newsletter_fk == 1)
             <input type="checkbox" checked name="newsletter_fk" id="newsletter_fk">
           @else
             <input type="checkbox" name="newsletter_fk" id="newsletter_fk">
@@ -138,8 +138,8 @@
   </div>
   <div class="col-md-6  text-center">
     <h3>Profilio nuotrauka</h3>
-    @if(Auth::user()->user_information->photo_fk != 0)
-        <img src="/{{ Auth::user()->user_information->photo->url }}" width="250" height="250" alt="Avatar" id="avatar_show" class="img-thumbnail" />
+    @if($data['user']->user_information->photo_fk != 0)
+        <img src="/{{ $data['user']->user_information->photo->url }}" width="250" height="250" alt="Avatar" id="avatar_show" class="img-thumbnail" />
     @else
         <img src="/Style/Images/avatar.jpg" width="250" height="250" alt="Avatar" id="avatar_show" class="img-thumbnail" />
     @endif
