@@ -6,8 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Design extends Model
 {
-    public function decorations()
+    public function design()
     {
-        return $this->belongsTo('App\Decorations', 'design_fk', 'id');
+        return $this->belongsTo('App\Decoration', 'design_fk', 'id');
     }
+    public $table = "design";
 }

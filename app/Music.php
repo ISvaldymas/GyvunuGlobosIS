@@ -6,8 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Music extends Model
 {
-    public function decorations()
+    public function music()
     {
-        return $this->belongsTo('App\Decorations', 'music_fk', 'id');
+        return $this->belongsTo('App\Decoration', 'music_fk', 'id');
     }
+
+    public $table = "music";
 }

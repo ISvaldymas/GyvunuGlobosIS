@@ -27,10 +27,10 @@
                         <a href="{{ url('report') }}">Ataskaitos</a>
                     </li>
                     <li>
-                        <a href="#">Apie</a>
+                         <a href="{{ url('entertainments') }}">Pramogos</a>
                     </li>
                    <li>
-                        <a href="#">Personalas</a>
+                        <a href="{{ url('decorations') }}">Dekoravimas</a>
                     </li>
                    <li>
                         <a href="#">Kontaktai</a>

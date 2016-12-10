@@ -136,10 +136,9 @@ class EmailController extends Controller
      */
     public function destroy($id2)
     {
-        // $message = message::find($id2);
-        // $message->delete();
-
-        // Session::flash('succsess', 'Pranešimas pašalintas');
-        // return redirect()->route('email.index');
+         $message = Message::find($id2);
+         $message->delete();
+         Session::flash('succsess', 'Pranešimas pašalintas');
+         return redirect()->route('email.index');
     }
 }

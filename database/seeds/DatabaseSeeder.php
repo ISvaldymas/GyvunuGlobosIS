@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ThemeSeeder::class);
         $this->call(AmenitiesTableSeeder::class);
         $this->call(MessageSeeder::class);
-
+        $this->call(EntertainmentSeeder::class);
+        $this->call(DecorationSeeder::class);
     }
 }

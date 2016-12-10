@@ -12,7 +12,7 @@ class Entertainment extends Model
      * @var array
      */
     protected $fillable = [
-        'price', 'duration',
+        'price', 'duration', 'body',
     ];
 
 	public function reservation()
@@ -28,5 +28,7 @@ class Entertainment extends Model
     {
         return $this->hasOne('App\Activity', 'id', 'activity_fk');
     }
+
+    public $table = "entertainment";
 
 }

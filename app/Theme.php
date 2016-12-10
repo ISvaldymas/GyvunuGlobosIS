@@ -6,8 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Theme extends Model
 {
-    public function decorations()
+    public function theme()
     {
-        return $this->belongsTo('App\Decorations', 'theme_fk', 'id');
+        return $this->belongsTo('App\Entertainment', 'theme_fk', 'id');
     }
+
+     public function themes()
+    {
+        return $this->belongsTo('App\Decoration', 'theme_fk', 'id');
+    }
+
+    public $table = "theme";
 }

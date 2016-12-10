@@ -14,11 +14,12 @@ class CreateEntertainmentTable extends Migration
     {
         Schema::create('entertainment', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('fk_reservation')->nullable()->unsigned();
             $table->integer('activity_fk')->default(1)->unsigned();
             $table->integer('theme_fk')->default(3)->unsigned();
+            $table->text('body');
             $table->double('price', 20);
             $table->time('duration', 20);
+            $table->timestamps();
         });
     }
 

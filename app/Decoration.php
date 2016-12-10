@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Decorations extends Model
+class Decoration extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -12,7 +12,7 @@ class Decorations extends Model
      * @var array
      */
     protected $fillable = [
-        'price',
+        'price', 'body',
     ];
 
     //Kardinalumai
@@ -36,8 +36,10 @@ class Decorations extends Model
         return $this->hasOne('App\Design', 'id', 'design_fk');
     }
 
-    public function theme()
+    public function themes()
     {
         return $this->hasOne('App\Theme', 'id', 'theme_fk');
     }
+
+    public $table = "decoration";
 }

@@ -11,13 +11,13 @@ class DesignSeeder extends Seeder
      */
     public function run()
     {
-       $designs = ['tradicinis', 'minimalizmas', 'kaimiškas', 'gotikinis'];
+        $designs = ['tradicinis', 'minimalizmas', 'kaimiškas', 'gotikinis'];
         foreach ($designs as $design) {
             DB::table('design')->insert([
                 'name' => $design,
                 'created_at' => new DateTime(),
                 'updated_at' => new DateTime()
             ]);
-        }
     }
+}
 }

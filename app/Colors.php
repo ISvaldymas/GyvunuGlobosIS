@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Colors extends Model
 {
-    public function decorations()
+    public function colors()
     {
-        return $this->belongsTo('App\Decorations', 'colors_fk', 'id');
+        return $this->belongsTo('App\Decoration', 'colors_fk', 'id');
     }
 }
