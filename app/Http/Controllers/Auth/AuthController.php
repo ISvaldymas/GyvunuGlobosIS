@@ -43,7 +43,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware($this->guestMiddleware(), ['except' => 'logout']);
+        $this->middleware($this->guestMiddleware(), ['except' => ['logout', 'register']]);
     }
 
     /**
@@ -85,25 +85,40 @@ class AuthController extends Controller
                 $request, $validator
             );
         }
-
-        Auth::guard($this->getGuard())->login($this->create($request->all()));
-
+        
+        $user = null;
         $token = hash_hmac('sha256', uniqid(), Str::random(40));
-        $data = array(
-            'user'  => Auth::user(),
-            'token'  => $token,
-            'email'  => Auth::user()->email,
-        );
-        Mail::send('Auth.emails.confirm', $data, function ($message) {
-            $message->from('kambariurezervacija@gmail.com', 'Informaciniai pagrindai');
-            $message->to(Auth::user()->email)->subject('Kambarių rezervacija - el. pašto patvirtinimas:');
-        });
-
+        if(Auth::check())
+        {
+            $this->create($request->all());
+            $user = User::where('email', $request->input('email'))->first();
+            $user->state_fk = 2;
+            $user->role_fk = 2;
+            $user->save();
+        }else
+        {
+            Auth::guard($this->getGuard())->login($this->create($request->all()));
+            $user = Auth::user();
+            $data = array(
+                'user'  => Auth::user(),
+                'token'  => $token,
+                'email'  => Auth::user()->email,
+            );
+            Mail::send('Auth.emails.confirm', $data, function ($message) {
+                $message->from('kambariurezervacija@gmail.com', 'Informaciniai pagrindai');
+                $message->to(Auth::user()->email);
+                $message->subject('Kambarių rezervacija - el. pašto patvirtinimas:');
+            });
+        }
+        
         $email_confirm = new EmailConfirm;
-        $email_confirm->email = Auth::user()->email;
+        $email_confirm->email = $user->email;
         $email_confirm->token = $token;
-        $email_confirm->user_fk = Auth::user()->id;
+        $email_confirm->user_fk = $user->id;
+        if(!Auth::check()){ $email_confirm->state_fk = 1; }
         $email_confirm -> save();
+
+        if(Auth::check() && Auth::user()->Role->id == 1){ return redirect()->route('staff.edit', $user->id); }
 
         return response()->json([
             'state' => 'succses'

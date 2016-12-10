@@ -33,7 +33,7 @@
         <div class="checkbox" name="room_type_fk">
         @foreach($data['cat'] as $type)  
               <label>
-                <input type="checkbox">{{ $type }}
+                <input type="checkbox" name="amenities[]" value="{{ $type->id }}">{{ $type->name }}
               </label>        
                </br>
         @endforeach

@@ -44,6 +44,10 @@ class UserInformationController extends Controller
                  'avatar'        => 'sometimes|image',
 	    ));
 
+        $staffID = Session::get('staffID', null);
+        $user = Auth::user();
+        if($staffID){ $user = User::find($staffID); }
+
         $UserInformation = new UserInformation;
         $UserInformation->name = $request -> name;
         $UserInformation->lastname = $request -> lastname;
@@ -56,13 +60,13 @@ class UserInformationController extends Controller
         	$avatar = $request->file('avatar');
         	$ext = $avatar->getClientOriginalExtension();
         	$filename = time(). '.' . $ext;
-        	$location = public_path('database/users/' . Auth::user()->id . '/' . $filename);
-        	File::makeDirectory(public_path('database/users/' . Auth::user()->id));
+        	$location = public_path('database/users/' . $user->id . '/' . $filename);
+        	File::makeDirectory(public_path('database/users/' . $user->id));
         	$img = Image::make($avatar)->resize(250, 250)->save($location);
 
         	//database
         	$photo = new Photo;
-        	$photo->url 	= 'database/users/' . Auth::user()->id . '/' . $filename;
+        	$photo->url 	= 'database/users/' . $user->id . '/' . $filename;
         	$photo->ext 	= $ext;
         	$photo->size 	= $img->filesize();
         	$photo->cover 	= 1;
@@ -70,9 +74,15 @@ class UserInformationController extends Controller
             $UserInformation -> photo_fk = $photo->id;
         }
         $UserInformation -> save();
-        Auth::user()->state_fk = 1;
-        Auth::user()->information_fk = $UserInformation->id;
-        Auth::user()->save();
+        $user->state_fk = 1;
+        $user->information_fk = $UserInformation->id;
+        $user->save();
+        if($user != Auth::user())
+        {
+            $message = "Darbuotojas sėkmingai priregistruotas";
+            Session::flash('succsess', $message);
+            return redirect('/staff');   
+        }
         $message = "Registracija baigta. Dėkojame, kad naudojatės Kambarių rezervacijos sistema.";
         Session::flash('succsess', $message);
 		return redirect('/home');
@@ -80,11 +90,12 @@ class UserInformationController extends Controller
 
     public function edit($id)
     {
-        if(Auth::check() && $id == Auth::user()->id)
+        if(Auth::check() && $id == Auth::user()->id || Auth::user()->Role->id == 1)
         {
             $data = array(
+                'user' => User::find($id),
                 'age_groupes'       => AgeGroup::all(),
-                'confirmed_emails'  => EmailConfirm::where('user_fk', Auth::user()->id)->get(),
+                'confirmed_emails'  => EmailConfirm::where('user_fk', $id)->where('state_fk', 1)->get(),
             );
             return view('KambariuRezervacija.profile')->with('data', $data);
         }
@@ -114,7 +125,7 @@ class UserInformationController extends Controller
         ));
 
         $v = Validator::make($request->all(), []);
-        $user = User::find(Auth::user()->id);
+        $user = User::find($id);
 
         if(!$request->has('old_password') && $request->has('new_password'))
         {
@@ -140,7 +151,7 @@ class UserInformationController extends Controller
         }
 
         //Patikrinti emaila:(naujas)
-        if(!EmailConfirm::where('email', $request->input('email'))->where('user_fk', Auth::user()->id)->first())
+        if(!EmailConfirm::where('email', $request->input('email'))->where('user_fk', $id)->first())
         {
             //patikrinti ar unikalus emailas:
             if(EmailConfirm::where('email', $request->input('email'))->exists())
@@ -151,7 +162,7 @@ class UserInformationController extends Controller
             {
                 $token = hash_hmac('sha256', uniqid(), Str::random(40));
                 $data = array(
-                    'user'  => Auth::user(),
+                    'user'  => $user,
                     'token'  => $token,
                     'email'  => $request->input('email'),
                 );
@@ -159,7 +170,7 @@ class UserInformationController extends Controller
                 $new_email->email = $request->input('email');
                 $new_email->token = $token;
                 $new_email->state_fk = 2;
-                $new_email->user_fk = Auth::user()->id;
+                $new_email->user_fk = $id;
                 $user->state_fk = 4;
                 $new_email->save();
                 $user->email = $request->input('email');
@@ -176,7 +187,7 @@ class UserInformationController extends Controller
         }
 
         //Pakeisti duomenis:
-        $information = UserInformation::find(Auth::user()->information_fk);
+        $information = UserInformation::find($user->information_fk);
 
         $information->name          = $request -> input('name');
         $information->lastname      = $request -> input('lastname');
@@ -189,21 +200,21 @@ class UserInformationController extends Controller
             $avatar     = $request->file('avatar');
             $ext        = $avatar->getClientOriginalExtension();
             $filename   = time(). '.' . $ext;
-            $location   = public_path('database/users/' . Auth::user()->id . '/' . $filename);
+            $location   = public_path('database/users/' . $id . '/' . $filename);
 
             //Patikrinti ar turi nuotrauka:
             $photo;
-            if(Photo::where('id', Auth::user()->user_information->photo_fk)->exists())
+            if(Photo::where('id', $user->user_information->photo_fk)->exists())
             {
-                $photo = Photo::find(Auth::user()->user_information->photo->id);
+                $photo = Photo::find($user->user_information->photo->id);
             }else
             {
                 $photo = new Photo;
             }
 
 
-            if(!File::exists(public_path('database/users/' . Auth::user()->id))) {
-                File::makeDirectory(public_path('database/users/' . Auth::user()->id));
+            if(!File::exists(public_path('database/users/' . $id))) {
+                File::makeDirectory(public_path('database/users/' . $id));
             }else
             {
                 File::delete(public_path($photo->url));
@@ -211,7 +222,7 @@ class UserInformationController extends Controller
 
             $img = Image::make($avatar)->resize(250, 250)->save($location);
 
-            $photo->url     = 'database/users/' . Auth::user()->id . '/' . $filename;
+            $photo->url     = 'database/users/' . $id . '/' . $filename;
             $photo->ext     = $ext;
             $photo->size    = $img->filesize();
             $photo->cover   = 1;

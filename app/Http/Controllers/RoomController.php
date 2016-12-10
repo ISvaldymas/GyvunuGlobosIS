@@ -54,7 +54,7 @@ class RoomController extends Controller
     public function create()
     {
         foreach(RoomType::all() as $ce){$room[]= $ce -> name;}
-        foreach(Amenities::all() as $ct){$cat[]= $ct -> name;}
+        foreach(Amenities::all() as $ct){$cat[]= $ct; }
             $data = array(
                 'room' => $room,
                 'cat' => $cat,
@@ -109,6 +109,12 @@ class RoomController extends Controller
             $room -> photo_fk = $photo->url;
         }
         $room -> save();
+
+        //save_amenities
+        foreach ($request->input('amenities') as $amenitie) {
+            //echo $amenitie;
+        }
+        //die();
 
         Session::flash('succsess', 'Naujas kambarys pridėtas.');
         //redirect to another page

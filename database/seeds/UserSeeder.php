@@ -38,6 +38,7 @@ class UserSeeder extends Seeder
     				'email' 	=> 'admin@gmail.com',
     				'token' 	=> hash_hmac('sha256', uniqid(), Str::random(40)),
     				'state_fk' 	=> 1,
+                    'user_fk'   => 1,
     			),
 
                 'photos' => array(

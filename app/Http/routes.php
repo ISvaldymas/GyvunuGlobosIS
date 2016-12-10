@@ -30,6 +30,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/registration', 'UserInformationController@registration');
 	Route::post('/registration/store', 'UserInformationController@store');
 	Route::get('/email/resend_confirm', 'Auth\EmailConfirmController@resendConfirmEmail');
+	Route::resource('staff', 'StaffController');
 	//-------------------------------------------------------------------
     Route::get('profile/{client}/edit', [
         'uses' => 'UserInformationController@edit',
