@@ -236,6 +236,9 @@ class RoomController extends Controller
 
         // Save to the database
         $room = Room::find($id);
+        $id = Photo::where('url', $room->photo_fk) -> first() -> id;
+        $photo = Photo::find($id);
+        $photo -> delete();
 
         $room -> number       = $request -> input('number');
         $room -> price        = $request -> input('price');
@@ -245,6 +248,9 @@ class RoomController extends Controller
             $photo;
             if($request->hasFile('avatar'))
             {
+
+        
+
             $room_image = $request->file('avatar');
             $ext = $room_image->getClientOriginalExtension();
             $filename = time(). '.' . $ext;
@@ -254,6 +260,14 @@ class RoomController extends Controller
             $oldFilename = $room->photo_fk;
             //update
             $room->photo_fk = 'database/rooms/'. $filename;
+                    //Photo
+            $photo = new Photo;
+            $photo->url     = 'database/rooms/' . $filename;
+            $photo->ext     = $ext;
+            $photo->size    = $img->filesize();
+            $photo->cover   = 1;
+            $photo->save();
+            $room -> photo_fk = $photo->url;
              //$room -> photo_fk = $img -> url;
             //delete
             File::delete(public_path($oldFilename));
