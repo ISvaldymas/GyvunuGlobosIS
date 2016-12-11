@@ -4,17 +4,39 @@
 @section('slider') @include('KambariuRezervacija.Layout.Partials.slider') @endsection
 @section('width') <div class="col-md-9"> @endsection
 @section('content')
+ 
+
+  @foreach ($data['rooms'] as $room)
+
   <div class="col-sm-4 col-lg-4 col-md-4">
-      <div class="thumbnail">
-          <img src="http://placehold.it/320x150" alt="">
+      <div class="thumbnail">          
+      @if($room->photo_fk != NULL)
+        <img src="{{ asset($room->photo_fk) }}" width="320" height="150" alt="Avatar" id="avatar_show" class="img-thumbnail">
+      @else
+       <img src="/Style/Images/avatar2.jpg" width="320" height="150" alt="Avatar" id="avatar_show" class="img-thumbnail">
+      @endif
+      <div class="form-group{{ $errors->has('avatar') ? ' has-error' : '' }}">
           <div class="caption">
-              <h4 class="pull-right">$24.99</h4>
-              <h4><a href="#">First Product</a>
+              <h4 class="pull-right">{{$room->price}} €</h4>
+         
+              @if($room->room_type_fk  == '0')
+
+              <h4><a href="{{ route('rooms.show', $room->id) }}">Vienvietis kambarys</a>
+              @endif
+              @if($room->room_type_fk  == '1')
+              <h4><a href="{{ route('rooms.show', $room->id) }}">Dvivietis kambarys</a>
+              @endif
+              @if($room->room_type_fk  == '2')
+              <h4><a href="{{ route('rooms.show', $room->id) }}">Trivietis kambarys</a>
+              @endif
+              @if($room->room_type_fk  == '3')
+              <h4><a href="{{ route('rooms.show', $room->id) }}">Keturvietis kambarys</a>
+              @endif
               </h4>
-              <p>See more snippets like this online store item at <a target="_blank" href="http://www.bootsnipp.com">Bootsnipp - http://bootsnipp.com</a>.</p>
+              <p>{{ substr($room->body, 0, 50) }}{{ strlen($room->body) > 50 ? "..." : "" }} </p>
           </div>
           <div class="ratings">
-              <p class="pull-right">15 reviews</p>
+              <p class="pull-right">TOP pasiūlymas!</p>
               <p>
                   <span class="glyphicon glyphicon-star"></span>
                   <span class="glyphicon glyphicon-star"></span>
@@ -24,100 +46,16 @@
               </p>
           </div>
       </div>
-  </div>
-
-  <div class="col-sm-4 col-lg-4 col-md-4">
-      <div class="thumbnail">
-          <img src="http://placehold.it/320x150" alt="">
-          <div class="caption">
-              <h4 class="pull-right">$64.99</h4>
-              <h4><a href="#">Second Product</a>
-              </h4>
-              <p>This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-          </div>
-          <div class="ratings">
-              <p class="pull-right">12 reviews</p>
-              <p>
-                  <span class="glyphicon glyphicon-star"></span>
-                  <span class="glyphicon glyphicon-star"></span>
-                  <span class="glyphicon glyphicon-star"></span>
-                  <span class="glyphicon glyphicon-star"></span>
-                  <span class="glyphicon glyphicon-star-empty"></span>
-              </p>
-          </div>
       </div>
   </div>
 
-  <div class="col-sm-4 col-lg-4 col-md-4">
-      <div class="thumbnail">
-          <img src="http://placehold.it/320x150" alt="">
-          <div class="caption">
-              <h4 class="pull-right">$74.99</h4>
-              <h4><a href="#">Third Product</a>
-              </h4>
-              <p>This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-          </div>
-          <div class="ratings">
-              <p class="pull-right">31 reviews</p>
-              <p>
-                  <span class="glyphicon glyphicon-star"></span>
-                  <span class="glyphicon glyphicon-star"></span>
-                  <span class="glyphicon glyphicon-star"></span>
-                  <span class="glyphicon glyphicon-star"></span>
-                  <span class="glyphicon glyphicon-star-empty"></span>
-              </p>
-          </div>
-      </div>
-  </div>
+  @endforeach
 
   <div class="col-sm-4 col-lg-4 col-md-4">
-      <div class="thumbnail">
-          <img src="http://placehold.it/320x150" alt="">
-          <div class="caption">
-              <h4 class="pull-right">$84.99</h4>
-              <h4><a href="#">Fourth Product</a>
-              </h4>
-              <p>This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-          </div>
-          <div class="ratings">
-              <p class="pull-right">6 reviews</p>
-              <p>
-                  <span class="glyphicon glyphicon-star"></span>
-                  <span class="glyphicon glyphicon-star"></span>
-                  <span class="glyphicon glyphicon-star"></span>
-                  <span class="glyphicon glyphicon-star-empty"></span>
-                  <span class="glyphicon glyphicon-star-empty"></span>
-              </p>
-          </div>
-      </div>
-  </div>
-
-  <div class="col-sm-4 col-lg-4 col-md-4">
-      <div class="thumbnail">
-          <img src="http://placehold.it/320x150" alt="">
-          <div class="caption">
-              <h4 class="pull-right">$94.99</h4>
-              <h4><a href="#">Fifth Product</a>
-              </h4>
-              <p>This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-          </div>
-          <div class="ratings">
-              <p class="pull-right">18 reviews</p>
-              <p>
-                  <span class="glyphicon glyphicon-star"></span>
-                  <span class="glyphicon glyphicon-star"></span>
-                  <span class="glyphicon glyphicon-star"></span>
-                  <span class="glyphicon glyphicon-star"></span>
-                  <span class="glyphicon glyphicon-star-empty"></span>
-              </p>
-          </div>
-      </div>
-  </div>
-
-  <div class="col-sm-4 col-lg-4 col-md-4">
-      <h4><a href="#">Like this template?</a>
+      <h4><a href="#">Norite sužinoti daugiau informacijos?</a>
       </h4>
-      <p>If you like this template, then check out <a target="_blank" href="http://maxoffsky.com/code-blog/laravel-shop-tutorial-1-building-a-review-system/">this tutorial</a> on how to build a working review system for your online store!</p>
-      <a class="btn btn-primary" target="_blank" href="http://maxoffsky.com/code-blog/laravel-shop-tutorial-1-building-a-review-system/">View Tutorial</a>
+      <p>Prisijunkite prie sistemos! </p>
+
   </div>
+    </div>
 @endsection

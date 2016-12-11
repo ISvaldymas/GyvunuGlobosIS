@@ -26,7 +26,7 @@ use App\RatedRooms;
 use App\RoomType;
 use App\StarsValue;
 use App\Amenities;
-
+use App\AmenityRooms;
 
 class RoomController extends Controller
 {
@@ -53,13 +53,22 @@ class RoomController extends Controller
      */
     public function create()
     {
+        
+        if(Auth::check()){
+        if(Auth::user()->Role->id == 1)
+        {
         foreach(RoomType::all() as $ce){$room[]= $ce -> name;}
         foreach(Amenities::all() as $ct){$cat[]= $ct; }
             $data = array(
                 'room' => $room,
                 'cat' => $cat,
+
             );
         return view('rooms.create')->with('data', $data);
+        }
+        }
+
+       return redirect('/rooms');
     }
 
     /**
@@ -70,7 +79,10 @@ class RoomController extends Controller
      */
     public function store(Request $request)
     {
-        //$room_type_fk = RoomType::where('name', $request->input('room_type_fk')) -> first()-> id;
+        
+        if(Auth::check()){
+        if(Auth::user()->Role->id == 1)
+        {
         //validate the data
         $this->validate($request,array(
             'number'        => 'required|max:3',
@@ -80,7 +92,12 @@ class RoomController extends Controller
             'room_image'        => 'sometimes|image'
             
             ));
-
+            $v = Validator::make($request->all(), []);  
+            if(Room::where('number', $request->input('number'))->exists())
+            {
+                Session::flash('warning', 'Kambario numeris jau egzistuoja!');
+                return redirect()->back()->withErrors($v->errors())->withInput();
+            }
         // store in the database
         $room = new Room;
 
@@ -88,7 +105,7 @@ class RoomController extends Controller
         $room -> price        = $request -> price;
         $room -> body         = $request -> body;
         $room-> room_type_fk   = $request -> room_type_fk;
-          
+
         //save image
         if($request->hasFile('avatar')){
             $room_image = $request->file('avatar');
@@ -96,7 +113,6 @@ class RoomController extends Controller
             $filename = time(). '.' . $ext;
             $location = public_path('database/rooms/'. $filename);
             File::isDirectory(public_path('database/rooms/')) or File::makeDirectory(public_path('database/rooms/'), 0777, true, true);
-            //File::makeDirectory(public_path('database/rooms/'));
             $img = Image::make($room_image)->resize(250, 250)->save($location);
 
         //Photo
@@ -108,18 +124,26 @@ class RoomController extends Controller
             $photo->save();
             $room -> photo_fk = $photo->url;
         }
+        
         $room -> save();
 
         //save_amenities
-        foreach ($request->input('amenities') as $amenitie) {
-            //echo $amenitie;
+         if($request->input('amenities')!= NULL){
+                    foreach ($request->input('amenities') as $amenitie) {
+            $amenitie_room = new AmenityRooms;
+            $amenitie_room->room_id = $room->id;
+            $amenitie_room->amenity_id = $amenitie;
+            $amenitie_room -> save();
         }
-        //die();
+
+         }
 
         Session::flash('succsess', 'Naujas kambarys pridėtas.');
         //redirect to another page
         return redirect() -> route('rooms.show',$room->id);          
         }
+    }else{ return redirect('/rooms');}
+}
 
     /**
      * Display the specified resource.
@@ -129,20 +153,35 @@ class RoomController extends Controller
      */
     public function show($id)
     {
-        //
+
         $room=Room::find($id);
-        $average=RatedRooms::where('room_id', $id) -> avg('rate_id');
+        $average=Rate::where('room_id', $id) -> avg('value_id');
+
         
+       // $amenity=AmenityRooms::where('room_id', $id);
         //$average=RatedRooms::where('room_id', $id) -> count();
-        foreach(StarsValue::all() as $ct){$cat[]= $ct -> value;}
-            $data = array(
+       foreach(Amenities::all() as $ce){$catt[]= $ce;}
+       foreach(AmenityRooms::all() as $cem){$cat1[]= $cem;}
+       foreach(StarsValue::all() as $ct){$cat[]= $ct -> value;}
+       if($cat1!=NULL){
+                $data = array(
                 'room' => $room,
                 'cat' => $cat,
                 'average' => $average,
+                'catt' => $catt,
+                'cat1' => $cat1,
             );
-        return view('rooms.show')->with('data',$data);
-    }
+       }else{
+                $data = array(
+                'room' => $room,
+                'cat' => $cat,
+                'average' => $average,
+                'catt' => $catt,
+            );
+       }
 
+        return view('rooms.show')->with('data',$data); 
+}
     /**
      * Show the form for editing the specified resource.
      *
@@ -151,26 +190,41 @@ class RoomController extends Controller
      */
     public function edit($id)
     {
-        //
+
+        if(Auth::check()){
+        if(Auth::user()->Role->id == 1)
+        {
+
         $room = Room::find($id);
-         $cat = array();
-        foreach(RoomType::all() as $ct){$cat[]= $ct -> name;}
-            $data = array(
+        $cat = array();
+       foreach(RoomType::all() as $ct){$cat[]= $ct -> name;}
+       foreach(Amenities::all() as $ct){$catt[]= $ct; }
+       foreach(AmenityRooms::all() as $cem){$cat1[]= $cem;}
+
+       if($cat1!=NULL){
+                $data = array(
                 'room' => $room,
                 'cat' => $cat,
+                'catt' => $catt,
+                'cat1' => $cat1,
             );
-           return view('rooms.edit')->with('data',$data);
-    }
+       }else{
+                $data = array(
+                'room' => $room,
+                'cat' => $cat,
+                'catt' => $catt,
+            );
+       }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+           return view('rooms.edit')->with('data',$data);
+                         
+    }
+  }
+    else{return redirect('/rooms');}
+}
     public function update(Request $request, $id)
     {
+
         // Validate the data
         $this->validate($request,array(
             'number'        => 'required|max:3',
@@ -187,7 +241,6 @@ class RoomController extends Controller
         $room -> price        = $request -> input('price');
         $room -> body         = $request -> input('body');
         $room-> room_type_fk   = $request -> input('room_type_fk');
-
 
             $photo;
             if($request->hasFile('avatar'))
@@ -206,6 +259,24 @@ class RoomController extends Controller
             File::delete(public_path($oldFilename));
 
             }
+
+        //amenitie_remove
+        $id_amenity_room = AmenityRooms::where('room_id', $room->id) -> count();
+        if($id_amenity_room != NULL){
+        for ($x = 0; $x < $id_amenity_room; $x++) {
+        $id_amenity_roomm = AmenityRooms::where('room_id', $room->id) -> first() -> id;
+        $amenity = AmenityRooms::find($id_amenity_roomm);
+        $amenity->delete();
+        }  
+        }
+        //save_amenities
+         if($request->input('amenities')!= NULL){
+                    foreach ($request->input('amenities') as $amenitie) {
+            $amenitie_room = new AmenityRooms;
+            $amenitie_room->room_id = $room->id;
+            $amenitie_room->amenity_id = $amenitie;
+            $amenitie_room -> save();
+        }}
         
           $room -> save();
         //set flash data with success message
@@ -213,7 +284,8 @@ class RoomController extends Controller
         // redirect wth flash data to rooms.show
           return redirect() -> route('rooms.show',$room->id);
 
-    }
+
+}
 
     /**
      * Remove the specified resource from storage.
@@ -223,22 +295,51 @@ class RoomController extends Controller
      */
     public function destroy($id2)
     {
-        //
+        if(Auth::check()){
+        if(Auth::user()->Role->id == 1)
+        {
+      
         $room = Room::find($id2);
         if($room->photo_fk != NULL){
-       // $com=Rate::where('room_id',$room->id) -> first() -> id;
-        
-        //$comment=Rate::find($com);
-        //$comment->delete();
         $id = Photo::where('url', $room->photo_fk) -> first() -> id;
         $photo = Photo::find($id);
         $photo -> delete();
         File::delete(public_path($room->photo_fk));
-        $room->delete();    
-        }else{$room->delete(); }
 
+        //amenitie_remove
+        $id_amenity_room = AmenityRooms::where('room_id', $room->id) -> count();
+        if($id_amenity_room != NULL){
+        for ($x = 0; $x < $id_amenity_room; $x++) {
+        $id_amenity_roomm = AmenityRooms::where('room_id', $room->id) -> first() -> id;
+        $amenity = AmenityRooms::find($id_amenity_roomm);
+        $amenity->delete();
+        }  
+        }
 
+        }else{
+             //amenitie_remove
+             $id_amenity_room = AmenityRooms::where('room_id', $room->id) -> count();
+             for ($x = 0; $x < $id_amenity_room; $x++) {
+                $id_amenity_roomm = AmenityRooms::where('room_id', $room->id) -> first() -> id;
+                $amenity = AmenityRooms::find($id_amenity_roomm);
+                $amenity->delete();
+            }
+            //rate_remove
+             $id_rated_room = RatedRooms::where('room_id', $room->id) -> count();
+             for ($x = 0; $x < $id_rated_room; $x++) {
+                $id_rated_roomm = RatedRooms::where('room_id', $room->id) -> first() -> id;
+                $rates = RatedRooms::find($id_rated_roomm);
+                $rates->delete();
+           } 
+
+          }
+            
+        $room->delete();
         Session::flash('succsess', 'Kambarys pašalintas');
         return redirect()->route('rooms.index');
+    
     }
+    }
+    return redirect('/rooms');
+}
 }

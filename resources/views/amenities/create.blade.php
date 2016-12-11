@@ -42,7 +42,7 @@
       {!! Form::open(array('route' => 'amenities.store', 'data-parsley-validate' =>'')) !!}
         <h3>Patogumo numeris: <small>{{ $data['cat1'] }}</small></h3>
         <h3>Patogumo pavadinimas:</h3>
-        {{ Form::text('name',null, array('class' => 'form-control')) }}
+        {{ Form::text('name',null, array('class' => 'form-control','required' => '')) }}
         {{ Form::submit('Pridėti', array('class' => 'btn btn-success btn-lg btn-block', 'style' => 'margin-top: 20px;')) }}
         {!! Form::close() !!}     
   </div>

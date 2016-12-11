@@ -23,9 +23,33 @@
         <div class="form-group">
             <label for="">Kambario tipas</label>
             {{ Form::select('room_type_fk', $data['cat'],null,array('class'=>'form-control','style'=>'width: 25%;')) }}
-
         </div>
 
+        <div class="form-group">
+       <label for="">Kambario patogumai: </label>
+        <div class="checkbox" name="room_type_fk">    
+       
+ 
+        @foreach($data['catt'] as $type) 
+        @foreach($data['cat1'] as $types)
+          @if( $data['room']->id == $types->room_id)     
+            @if ($types -> amenity_id == $type -> id )
+              <label>
+                <input type="checkbox" name="amenities[]" value="{{ $type->id }}" checked>{{ $type->name }}
+              </label>        
+               </br>
+              @endif 
+          @endif
+       @endforeach
+            <label>
+                <input type="checkbox" name="amenities[]" value="{{ $type->id }}" >{{ $type->name }}
+              </label>        
+               </br>
+        @endforeach
+          
+
+</div>
+       </div>
         {{ Form::label('price','Kaina:') }}
         {{ Form::number('price',null, array('class' => 'form-control', 'required' => '','min' => '0','minlength' => '3', 'maxlength' => '4')) }}
 

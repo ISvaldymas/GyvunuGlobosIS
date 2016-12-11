@@ -17,7 +17,7 @@ class Room extends Model
     }
     public function rate()
     {
-    	return $this->hasMany('App\Rate');
+        return $this->hasMany('App\Rate');
     }
         public function amenities()
     {

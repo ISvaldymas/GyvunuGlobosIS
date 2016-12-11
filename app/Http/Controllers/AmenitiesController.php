@@ -26,6 +26,7 @@ use App\RatedRooms;
 use App\RoomType;
 use App\StarsValue;
 use App\Amenities;
+use App\AmenityRooms;
 
 
 class AmenitiesController extends Controller
@@ -47,14 +48,19 @@ class AmenitiesController extends Controller
      */
     public function create()
     {
-        
+        if(Auth::check()){
+        if( Auth::user()->Role->id == 1)
+        {
         $cat=Amenities::all();
         $cat1=Amenities::count('id');
             $data = array(
                 'cat' => $cat,
                 'cat1' =>$cat1+1,
             );
+        Session::flash('success', 'Patogumas pridėtas į sąrašą');
         return view('amenities.create')->with('data',$data);
+    }
+}else{ return redirect('/rooms');}
     }
 
     /**
@@ -65,18 +71,29 @@ class AmenitiesController extends Controller
      */
     public function store(Request $request)
     {
-           
+        if(Auth::check()){
+        if(Auth::user()->Role->id == 1)
+        {  
         $this->validate($request, array(
             'name'      =>  'required|max:255'
             ));
 
+            $v = Validator::make($request->all(), []);  
+            if(Amenities::where('name', $request->input('name'))->exists())
+            {
+                Session::flash('warning', 'Patogumas jau egzistuoja');
+                return redirect()->back()->withErrors($v->errors())->withInput();
+            } 
+
         $amenity = new Amenities;
         $amenity->name = $request->name;
+
  
         $amenity->save();     
-
         Session::flash('success', 'Patogumas pridėtas į sąrašą');
         return redirect()->route('amenities.create');
+    }
+}else{ return redirect('/rooms');}
     }
 
     /**
@@ -123,8 +140,15 @@ class AmenitiesController extends Controller
     {
 
         $amenity = Amenities::find($id);
-        $amenity -> delete();
-        Session::flash('succsess', 'Patogumas pašalintas');
+        $amenity_room = AmenityRooms::where('amenity_id',$amenity->id)-> count();
+        if($amenity_room != NULL)
+        {
+            Session::flash('warning', 'Patogumas negali būti pašalintas! Jis yra naudojamas');
+        }else{
+            $amenity -> delete();
+            Session::flash('succsess', 'Patogumas pašalintas'); 
+        }
+
         return redirect()->route('amenities.create');
     }
 }

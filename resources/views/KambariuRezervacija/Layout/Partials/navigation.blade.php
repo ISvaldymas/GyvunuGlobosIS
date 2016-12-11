@@ -17,9 +17,11 @@
                     <li>
                         <a href="{{ url('/') }}">Pagrindinis</a>
                     </li>
+                    @if(Auth::check())
                     <li>
                         <a href="{{ url('rooms') }}">Kambariai</a>
                     </li>
+                    @endif
                    <li>
                         <a href="#">Kontaktai</a>
                     </li>

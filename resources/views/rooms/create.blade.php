@@ -20,7 +20,6 @@
       {!! Form::open(array('route' => 'rooms.store', 'data-parsley-validate' =>'', 'files' => true)) !!}
         {{ Form::label('number','Kambario numeris:') }}
         {{ Form::number('number',0, array('class' => 'form-control', 'required' => '')) }}
-
         {{ Form::label('price','Kaina:') }}
         {{ Form::number('price','0', array('class' => 'form-control', 'required' => '','min' => '0')) }}
 

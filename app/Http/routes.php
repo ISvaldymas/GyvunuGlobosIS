@@ -10,12 +10,7 @@
 | and give it the controller to call when that URI is requested.
 |
 */
-Route::resource('rooms','RoomController');
-Route::resource('amenities','AmenitiesController');
 
-Route::post('rooms/{room_id}', [
-	'uses' => 'RateController@store',
-	'as' => 'rate.store']);
 Route::group(['middleware' => 'guest'], function () {
 	//Only guests users may enter:
 	Route::get('/', 'PagesController@getIndex');
@@ -50,5 +45,13 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('ereport', 'ReportsController@index');
 	Route::resource('entertainments','EntertainmentController');
 	Route::resource('decorations','DecorationController');
+	//-------------------
+		//--------------------
+	Route::resource('rooms','RoomController');
+	Route::resource('amenities','AmenitiesController');
+
+	Route::post('rooms/{room_id}', [
+	'uses' => 'RateController@store',
+	'as' => 'rate.store']);
 });
 
