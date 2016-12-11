@@ -36,7 +36,7 @@
         </thead>
         <!-- foreach ciklas -->
         <thead>
-          <th> Laurynas Patašius</th>
+          <th> Jonas Petrauskas</th>
         </thead>
         <!-- foreach ciklas -->
         <tbody>
@@ -52,7 +52,7 @@
                   Spalva: Raudona<br>
                   Muzika: Metalas<br>
                   Dizainas: Gotikinis</td>
-          	  <td>Totorių šou</td>
+          	  <td>Spektaklis</td>
               <td>110 eurų</td>                    
           </tr>
           </tbody>

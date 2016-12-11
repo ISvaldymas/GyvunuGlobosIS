@@ -13,7 +13,7 @@
     </div>
 
     <div class="col-md-2">
-      {{ Form::select('size', ['L' => 'Paslaugų ataskaita', 'K' => 'Kambarių ataskaita', 'M' => 'Klientų kambarių ataskaita', 'S' => 'Mokėjimų ataskaita', 'N' => 'Klientų ataskaita'], 'K', array('class'=>'form-control','style'=>'width: 100%;')) }}
+      {{ Form::select('size', ['L' => 'Paslaugų ataskaita', 'K' => 'Kambarių populiarumo ataskaita'], 'K', array('class'=>'form-control','style'=>'width: 100%;')) }}
     </div>
     </div>
     <div class="col-md-12">

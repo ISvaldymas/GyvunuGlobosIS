@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
-class ReportController extends Controller
+class ReportsController extends Controller
 {
      /**
      * Display a listing of the resource.
@@ -15,6 +15,6 @@ class ReportController extends Controller
      */
     public function index()
     {
-          return view('reports.report5');
+          return view('ereports.report');
     }
 }

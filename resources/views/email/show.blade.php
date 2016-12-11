@@ -13,7 +13,7 @@
       <h1>Pranešimas</h1>
     </div>
       <div class="col-md-2">
-      <!-- Form::open(['route' => ['message.destroy', $data['mes'] -> id], 'method' => 'DELETE']) errora meta-->
+      {!! Form::open(['route' => ['email.destroy', $data['mes'] -> id], 'method' => 'DELETE'])!!}
      {!! Form::submit('Pašalinti', ['class' => 'btn btn-lg btn-block btn-primary btn-h1-spacing','style' => 'margin-top:15px;'])!!}
      {!! Form::close() !!}
      </div>

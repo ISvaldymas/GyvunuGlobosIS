@@ -20,20 +20,11 @@
                     <li>
                         <a href="{{ url('rooms') }}">Kambariai</a>
                     </li>
-                    <li>
-                        <a href="{{ url('email') }}">Paštas</a>
-                    </li>
-                    <li>
-                        <a href="{{ url('report') }}">Ataskaitos</a>
-                    </li>
-                    <li>
-                         <a href="{{ url('entertainments') }}">Pramogos</a>
-                    </li>
-                   <li>
-                        <a href="{{ url('decorations') }}">Dekoravimas</a>
-                    </li>
                    <li>
                         <a href="#">Kontaktai</a>
+                    </li>
+                    <li>
+                        <a href="#">Apie</a>
                     </li>
                 </ul>
                 <!-- /. Login form -->

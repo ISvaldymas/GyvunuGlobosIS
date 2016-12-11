@@ -56,7 +56,7 @@
                                 <!--/ Administartorius -->
                                 @if(Auth::user()->Role->id == 1)
                                     <li>
-                                        <a href="#">
+                                        <a href="{{ url('rooms') }}">
                                         <i class="glyphicon glyphicon-bed"></i>
                                         Kambariai </a>
                                     </li>
@@ -66,12 +66,12 @@
                                         Rezervacijos </a>
                                     </li>
                                     <li>
-                                        <a href="#">
+                                        <a href="{{ url('report') }}">
                                         <i class="glyphicon glyphicon-list"></i>
                                         Ataskaitos </a>
                                     </li>    
                                     <li>
-                                        <a href="#">
+                                        <a href="{{ url('email') }}">
                                         <i class="glyphicon glyphicon-envelope"></i>
                                         Pranešimai </a>
                                     </li>
@@ -80,7 +80,17 @@
                                 <!--/ Darbuotojas -->
                                 @if(Auth::user()->Role->id == 2)
                                     <li>
-                                        <a href="#">
+                                        <a href="{{ url('entertainments') }}">
+                                        <i class="glyphicon glyphicon-music"></i>
+                                        Pramogos </a>
+                                    </li>
+                                     <li>
+                                        <a href="{{ url('decorations') }}">
+                                        <i class="glyphicon glyphicon-scissors"></i>
+                                        Dekoras </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ url('ereport') }}">
                                         <i class="glyphicon glyphicon-list"></i>
                                         Ataskaitos </a>
                                     </li>

@@ -26,7 +26,7 @@
 
         <div class="form-group">
             <label for="">Pramogos tema</label>
-            {{ Form::select('theme_fk', $data['entertainment'], null,array('class'=>'form-control','style'=>'width: 25%;')) }}
+            {{ Form::select('theme_fk', $data['entertainments'], null,array('class'=>'form-control','style'=>'width: 25%;')) }}
         </div>
 
         {{ Form::label('duration','Trukmė:') }}

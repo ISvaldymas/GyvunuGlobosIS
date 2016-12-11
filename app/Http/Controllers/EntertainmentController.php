@@ -38,6 +38,7 @@ class EntertainmentController extends Controller
         foreach(Theme::all() as $ec){$entertainments[]= $ec -> name;}
              $data = array(
                  'entertainment' => $entertainment,
+                 'entertainments' => $entertainments,
              );
          return view('entertainments.create')->with('data', $data);
     }

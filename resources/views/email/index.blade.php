@@ -44,7 +44,8 @@
           <th>Tema</th>
           <th>Gavėjo email</th>
           <th>Data</th>
-          <th>Laiško turinys </th>
+          <th></th>
+          <th></th>
         </thead>
         <tbody>
        @foreach ($data['message'] as $mes)
@@ -52,7 +53,7 @@
         <td>{{ substr($mes->subject, 0, 30) }}{{ strlen($mes->subject) > 30 ? "..." : "" }}</td>
         <td>{{ substr($mes->email, 0, 50) }}</td>
         <td>{{ substr($mes->created_at, 0, 50) }}</td>
-        <td><a href="{{ route('email.show', $mes->id) }}" class="btn btn-primary btn-sm" style="float: right;">Plačiau</a>
+        <td><a href="{{ route('email.show', $mes->id) }}" class="btn btn-primary btn-sm" style="float: right;">Plačiau</a><a href="{{ route('email.destroy', $mes->id) }}" class="btn btn-primary btn-sm " style="float: right;">Naikinti</a></td>
         </tr>
          @endforeach
         </tbody>
