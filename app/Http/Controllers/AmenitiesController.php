@@ -40,7 +40,6 @@ class AmenitiesController extends Controller
     {
         //
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -49,53 +48,45 @@ class AmenitiesController extends Controller
     public function create()
     {
         if(Auth::check()){
-        if( Auth::user()->Role->id == 1)
-        {
-        $cat=Amenities::all();
-        $cat1=Amenities::count('id');
+            if( Auth::user()->Role->id == 1)
+            {
+            $cat=Amenities::all();
+            $cat1=Amenities::count('id');
             $data = array(
                 'cat' => $cat,
                 'cat1' =>$cat1+1,
             );
-        Session::flash('success', 'Patogumas pridėtas į sąrašą');
-        return view('amenities.create')->with('data',$data);
-    }
-}else{ return redirect('/rooms');}
-    }
+            Session::flash('success', 'Patogumas pridėtas į sąrašą');
+            return view('amenities.create')->with('data',$data);
+            }
+        }else{ 
+                return redirect('/rooms');
+             }
+}
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         if(Auth::check()){
-        if(Auth::user()->Role->id == 1)
-        {  
-        $this->validate($request, array(
-            'name'      =>  'required|max:255'
-            ));
+            if(Auth::user()->Role->id == 1)
+            {  
+                $this->validate($request, array(
+                'name'      =>  'required|max:255'
+                ));
 
-            $v = Validator::make($request->all(), []);  
-            if(Amenities::where('name', $request->input('name'))->exists())
-            {
-                Session::flash('warning', 'Patogumas jau egzistuoja');
-                return redirect()->back()->withErrors($v->errors())->withInput();
-            } 
-
-        $amenity = new Amenities;
-        $amenity->name = $request->name;
-
- 
-        $amenity->save();     
-        Session::flash('success', 'Patogumas pridėtas į sąrašą');
-        return redirect()->route('amenities.create');
+                $v = Validator::make($request->all(), []);  
+                if(Amenities::where('name', $request->input('name'))->exists())
+                {
+                    Session::flash('warning', 'Patogumas jau egzistuoja');
+                    return redirect()->back()->withErrors($v->errors())->withInput();
+                } 
+                $amenity = new Amenities;
+                $amenity->name = $request->name;
+                $amenity->save();     
+                Session::flash('success', 'Patogumas pridėtas į sąrašą');
+                return redirect()->route('amenities.create');
+            }
+        }else{ return redirect('/rooms');}
     }
-}else{ return redirect('/rooms');}
-    }
-
     /**
      * Display the specified resource.
      *

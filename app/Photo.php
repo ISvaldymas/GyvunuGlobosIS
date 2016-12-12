@@ -14,5 +14,9 @@ class Photo extends Model
     {
         return $this->belongsTo('App\Room', 'photo_fk', 'id');
     }
+    public function rate()
+    {
+        return $this->belongsTo('App\Rate', 'photo_fk', 'id');
+    }
 
 }

@@ -142,10 +142,20 @@
 <div class="comment-content">Norint peržiūrėti komenterus/ įvertinti kambrį - prisijunkite!</div>
 @endif
 
-      @foreach($data['room']->rate as $comment)
+           @foreach($data['room']->rate as $comment)
         <div class="comment" style="margin-top: 45px;">
         <div class="author-info">
-        <img src="{{ "https://www.gravatar.com/avatar/" . md5(strtolower(trim($comment->email))) . "?s=50&d=monsterid" }}" class="author-image">
+
+              @if($comment->photo_fk == 0)
+                    <img src="/Style/Images/avatar.jpg" class="author-image" alt="">
+                  @else
+                    @foreach($data['foto'] as $photo)
+                    @if($comment->photo_fk == $photo->id)
+                    <img src="/{{$photo->url}}" class="author-image" alt="">
+                    @endif
+                   @endforeach
+              @endif
+              
         <div class="author-name">
         <h4>{{$comment->name}}</h4>
         <p class="author-time">{{ date('F nS, Y - g:iA' ,strtotime($comment->created_at)) }}</p>
@@ -155,7 +165,7 @@
 
           <div class="comment-content">
             {{ $comment->comment }}
-           
+   <div>        
 @if($comment->value_id == 0)
                   <span class="glyphicon glyphicon-star-empty icon-success"></span>
                   <span class="glyphicon glyphicon-star-empty icon-success"></span>
@@ -198,10 +208,11 @@
                   <span class="glyphicon glyphicon-star icon-success"></span>
                   <span class="glyphicon glyphicon-star icon-success"></span>        
 @endif
+</div>
           </div>
 
         </div>
-      @endforeach
+@endforeach
         </div>
   </div>
     
@@ -210,20 +221,23 @@
     <div id="comment-form" class="col-md-8" style="margin-top: 50px;">
       {{ Form::open(['route' => ['rate.store', $data['room']->id], 'method' => 'POST']) }}
 @if(Auth::check())
+@if(Auth::user()->information_fk > 0)
+
         <div class="row">
           <div class="col-md-6">
             {{ Form::label('name', "Vardas:") }}
-            {{ Form::text('name', null, ['class' => 'form-control']) }}
+           <input autofocus type="text" name="name" class="form-control" id="name" value="{{ Auth::user()->user_information->name }}" readonly>
+
           </div>
 
           <div class="col-md-6">
             {{ Form::label('email', 'El.paštas:') }}
-             <input type="text" name="email" class="form-control" id="name" placeholder="{{ Auth::user()->email }}">
+             <input autofocus type="text" name="email" class="form-control" id="name" value="{{ Auth::user()->email }}" readonly>
           </div>
 
           <div class="col-md-12">
             {{ Form::label('comment', "Komentaras:") }}
-            {{ Form::textarea('comment', null, ['class' => 'form-control', 'rows' => '5']) }}
+            {{ Form::textarea('comment', null, ['class' => 'form-control', 'required' => '', 'rows' => '5']) }}
 
        <div class="col-md-6">
         {{ Form::label('value_id','Įvertinimas:') }}
@@ -234,10 +248,15 @@
   <span class=" glyphicon glyphicon-star icon-success">{{ Form::radio('value_id', '5') }}</span>
         </div>
 
+@if(Auth::user()->user_information->photo_fk != 0)
+  <input type="hidden" name="photo_fk" class="form-control" id="photo_fk" value="{{ Auth::user()->user_information->photo->id }}">
+@else  <input type="hidden" name="photo_fk" class="form-control" id="photo_fk" value="0">
+@endif
             <div class="col-md-12">
            {{ Form::submit('Vertinti', ['class' => 'btn btn-success btn-block', 'style' => 'margin-top:15px;']) }}
           </div>
 
+@endif
 @endif
       {{ Form::close() }}
     

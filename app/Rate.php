@@ -18,4 +18,8 @@ class Rate extends Model
     {
         return $this->hasOne('App\StarsValue','value','value_id');
     }
+    public function photo()
+    {
+        return $this->hasOne('App\Photo', 'id', 'photo_fk');
+    }
 }

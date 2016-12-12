@@ -20,6 +20,7 @@ class CreateRatesTable extends Migration
             $table->integer('value_id')->nullable()->unsigned();
             $table->boolean('approved');
             $table->integer('room_id')->unsigned();
+             $table->integer('photo_fk')->nullable()->unsigned();
             $table->timestamps();
         });
      Schema::table('rates', function ($table){

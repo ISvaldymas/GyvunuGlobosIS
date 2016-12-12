@@ -39,13 +39,12 @@ class RoomController extends Controller
     {
         $rooms = Room::all();
         $data = array(
-            'rooms' => $rooms,
+            'rooms'    => $rooms,
             'count'    => Room::count(),
         );
    
-          return view('rooms.index')->with('data', $data);
+        return view('rooms.index')->with('data', $data);
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -53,7 +52,7 @@ class RoomController extends Controller
      */
     public function create()
     {
-        
+        //tikrinu ar vartotojos prisijunges
         if(Auth::check()){
         if(Auth::user()->Role->id == 1)
         {
@@ -62,15 +61,12 @@ class RoomController extends Controller
             $data = array(
                 'room' => $room,
                 'cat' => $cat,
-
             );
         return view('rooms.create')->with('data', $data);
         }
         }
-
        return redirect('/rooms');
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -80,6 +76,7 @@ class RoomController extends Controller
     public function store(Request $request)
     {
         
+        //tikrinu ar vartotojas prisijunges
         if(Auth::check()){
         if(Auth::user()->Role->id == 1)
         {
@@ -89,22 +86,23 @@ class RoomController extends Controller
             'price'         => 'required|max:4',
             'body'          => 'required',
             'room_type_fk'  => 'required',
-            'room_image'        => 'sometimes|image'
+            'room_image'    => 'sometimes|image'
             
             ));
+            //tikrinu ar kambario numeris neegzistuoja
             $v = Validator::make($request->all(), []);  
             if(Room::where('number', $request->input('number'))->exists())
             {
                 Session::flash('warning', 'Kambario numeris jau egzistuoja!');
                 return redirect()->back()->withErrors($v->errors())->withInput();
             }
+
         // store in the database
         $room = new Room;
-
         $room -> number       = $request -> number;
         $room -> price        = $request -> price;
         $room -> body         = $request -> body;
-        $room-> room_type_fk   = $request -> room_type_fk;
+        $room -> room_type_fk = $request -> room_type_fk;
 
         //save image
         if($request->hasFile('avatar')){
@@ -117,10 +115,10 @@ class RoomController extends Controller
 
         //Photo
             $photo = new Photo;
-            $photo->url     = 'database/rooms/' . $filename;
-            $photo->ext     = $ext;
-            $photo->size    = $img->filesize();
-            $photo->cover   = 1;
+            $photo->url       = 'database/rooms/' . $filename;
+            $photo->ext       = $ext;
+            $photo->size      = $img->filesize();
+            $photo->cover     = 1;
             $photo->save();
             $room -> photo_fk = $photo->url;
         }
@@ -135,16 +133,14 @@ class RoomController extends Controller
             $amenitie_room->amenity_id = $amenitie;
             $amenitie_room -> save();
         }
-
-         }
-
+        }
+        //sėkmės pranešimas
         Session::flash('succsess', 'Naujas kambarys pridėtas.');
         //redirect to another page
         return redirect() -> route('rooms.show',$room->id);          
         }
     }else{ return redirect('/rooms');}
 }
-
     /**
      * Display the specified resource.
      *
@@ -154,13 +150,11 @@ class RoomController extends Controller
     public function show($id)
     {
 
-        $room=Room::find($id);
-        $average=Rate::where('room_id', $id) -> avg('value_id');
-
-        
-       // $amenity=AmenityRooms::where('room_id', $id);
-        //$average=RatedRooms::where('room_id', $id) -> count();
+       $room=Room::find($id);
+       $average=Rate::where('room_id', $id) -> avg('value_id');
        foreach(Amenities::all() as $ce){$catt[]= $ce;}
+        foreach(Photo::all() as $cee){$foto[]= $cee;}
+       
        foreach(AmenityRooms::all() as $cem){$cat1[]= $cem;}
        foreach(StarsValue::all() as $ct){$cat[]= $ct -> value;}
        if($cat1!=NULL){
@@ -170,16 +164,17 @@ class RoomController extends Controller
                 'average' => $average,
                 'catt' => $catt,
                 'cat1' => $cat1,
-            );
+                'foto'  => $foto,
+                );
        }else{
                 $data = array(
                 'room' => $room,
                 'cat' => $cat,
                 'average' => $average,
                 'catt' => $catt,
-            );
+                'foto'  => $foto,
+                );
        }
-
         return view('rooms.show')->with('data',$data); 
 }
     /**
@@ -188,40 +183,42 @@ class RoomController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    private function selected($selected_amenities, $id)
+    {
+      foreach ($selected_amenities as $selected_amenity) {
+        if($selected_amenity->amenity_id == $id) return true;
+      }
+      return false;
+    }
+
     public function edit($id)
     {
 
-        if(Auth::check()){
-        if(Auth::user()->Role->id == 1)
+        if(Auth::check() && Auth::user()->Role->id == 1)
         {
-
-        $room = Room::find($id);
-        $cat = array();
-       foreach(RoomType::all() as $ct){$cat[]= $ct -> name;}
-       foreach(Amenities::all() as $ct){$catt[]= $ct; }
-       foreach(AmenityRooms::all() as $cem){$cat1[]= $cem;}
-
-       if($cat1!=NULL){
-                $data = array(
-                'room' => $room,
-                'cat' => $cat,
-                'catt' => $catt,
-                'cat1' => $cat1,
+          $room = Room::find($id);
+          $cat = array();
+          $amenities = Amenities::all();
+          $amenities_result = array();
+          foreach(RoomType::all() as $ct){$cat[]= $ct -> name;}
+          foreach($amenities as $amenitiy)
+          {
+            $amenities_result[] = (object)array(
+              'id' => $amenitiy->id,
+              'name' => $amenitiy->name,
+              'checked' => ($this->selected(AmenityRooms::where('room_id', $id)->get(), $amenitiy->id)) ? 'checked' : '',
             );
-       }else{
-                $data = array(
-                'room' => $room,
-                'cat' => $cat,
-                'catt' => $catt,
-            );
-       }
-
-           return view('rooms.edit')->with('data',$data);
-                         
+          }
+          $data = array(
+            'room' => $room,
+            'cat' => $cat,
+            'catt' => $amenities_result,
+          );
+          return view('rooms.edit')->with('data',$data);
+        }
+      return redirect('/rooms');
     }
-  }
-    else{return redirect('/rooms');}
-}
+
     public function update(Request $request, $id)
     {
 
@@ -236,71 +233,68 @@ class RoomController extends Controller
 
         // Save to the database
         $room = Room::find($id);
-        $id = Photo::where('url', $room->photo_fk) -> first() -> id;
-        $photo = Photo::find($id);
-        $photo -> delete();
-
         $room -> number       = $request -> input('number');
         $room -> price        = $request -> input('price');
         $room -> body         = $request -> input('body');
         $room-> room_type_fk   = $request -> input('room_type_fk');
 
-            $photo;
             if($request->hasFile('avatar'))
             {
-
-        
+              //tikrinu ar yra nuotrauka
+            $photo;
+            if(Photo::where('url',$room->photo_fk)->exists())
+            {
+                  $id = Photo::where('url', $room->photo_fk) -> first() -> id;
+                  $photo = Photo::find($id);
+                  //$photo->delete();
+            }else
+            {
+                $photo = new Photo;
+            }
 
             $room_image = $request->file('avatar');
             $ext = $room_image->getClientOriginalExtension();
             $filename = time(). '.' . $ext;
             $location = public_path('database/rooms/'. $filename);
-            //File::makeDirectory(public_path('database/rooms/'));
+            
             $img = Image::make($room_image)->resize(250, 250)->save($location);
             $oldFilename = $room->photo_fk;
             //update
             $room->photo_fk = 'database/rooms/'. $filename;
-                    //Photo
-            $photo = new Photo;
+            //Photo
             $photo->url     = 'database/rooms/' . $filename;
             $photo->ext     = $ext;
             $photo->size    = $img->filesize();
             $photo->cover   = 1;
             $photo->save();
             $room -> photo_fk = $photo->url;
-             //$room -> photo_fk = $img -> url;
             //delete
             File::delete(public_path($oldFilename));
-
             }
 
         //amenitie_remove
         $id_amenity_room = AmenityRooms::where('room_id', $room->id) -> count();
         if($id_amenity_room != NULL){
-        for ($x = 0; $x < $id_amenity_room; $x++) {
-        $id_amenity_roomm = AmenityRooms::where('room_id', $room->id) -> first() -> id;
-        $amenity = AmenityRooms::find($id_amenity_roomm);
-        $amenity->delete();
-        }  
+          for ($x = 0; $x < $id_amenity_room; $x++) {
+            $id_amenity_roomm = AmenityRooms::where('room_id', $room->id) -> first() -> id;
+            $amenity = AmenityRooms::find($id_amenity_roomm);
+            $amenity->delete();
+          }  
         }
         //save_amenities
          if($request->input('amenities')!= NULL){
-                    foreach ($request->input('amenities') as $amenitie) {
-            $amenitie_room = new AmenityRooms;
-            $amenitie_room->room_id = $room->id;
-            $amenitie_room->amenity_id = $amenitie;
-            $amenitie_room -> save();
-        }}
-        
-          $room -> save();
+            foreach ($request->input('amenities') as $amenitie) {
+              $amenitie_room = new AmenityRooms;
+              $amenitie_room->room_id = $room->id;
+              $amenitie_room->amenity_id = $amenitie;
+              $amenitie_room -> save();
+        }}        
+        $room -> save();
         //set flash data with success message
-          Session::flash('succsess', 'Informacija atnaujinta');
+        Session::flash('succsess', 'Informacija atnaujinta');
         // redirect wth flash data to rooms.show
-          return redirect() -> route('rooms.show',$room->id);
-
-
+        return redirect() -> route('rooms.show',$room->id);
 }
-
     /**
      * Remove the specified resource from storage.
      *
@@ -323,11 +317,11 @@ class RoomController extends Controller
         //amenitie_remove
         $id_amenity_room = AmenityRooms::where('room_id', $room->id) -> count();
         if($id_amenity_room != NULL){
-        for ($x = 0; $x < $id_amenity_room; $x++) {
-        $id_amenity_roomm = AmenityRooms::where('room_id', $room->id) -> first() -> id;
-        $amenity = AmenityRooms::find($id_amenity_roomm);
-        $amenity->delete();
-        }  
+          for ($x = 0; $x < $id_amenity_room; $x++) {
+            $id_amenity_roomm = AmenityRooms::where('room_id', $room->id) -> first() -> id;
+            $amenity = AmenityRooms::find($id_amenity_roomm);
+            $amenity->delete();
+            }  
         }
 
         }else{
@@ -337,21 +331,18 @@ class RoomController extends Controller
                 $id_amenity_roomm = AmenityRooms::where('room_id', $room->id) -> first() -> id;
                 $amenity = AmenityRooms::find($id_amenity_roomm);
                 $amenity->delete();
-            }
+                }
             //rate_remove
              $id_rated_room = RatedRooms::where('room_id', $room->id) -> count();
              for ($x = 0; $x < $id_rated_room; $x++) {
                 $id_rated_roomm = RatedRooms::where('room_id', $room->id) -> first() -> id;
                 $rates = RatedRooms::find($id_rated_roomm);
                 $rates->delete();
-           } 
-
+                } 
           }
-            
         $room->delete();
         Session::flash('succsess', 'Kambarys pašalintas');
         return redirect()->route('rooms.index');
-    
     }
     }
     return redirect('/rooms');

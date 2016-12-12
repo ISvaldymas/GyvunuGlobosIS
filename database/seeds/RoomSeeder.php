@@ -11,12 +11,12 @@ class RoomSeeder extends Seeder
      */
     public function run()
     {
-                //Users:
+        //Rooms:
         $rooms = array(
             "Room_1" => array(
 
                 'room' => array(
-                    'id'          => 1, //password: admin123
+                    'id'          => 1, 
                     'number'       => 101, 
                     'room_type_fk' => 0,
                     'price'       => 28,
@@ -32,11 +32,11 @@ class RoomSeeder extends Seeder
                     'cover'     => 1,
                 ),
             ),
-            //Sekantys useriai:
+            //Sekantys kambariai:
               "Room_2" => array(
 
                 'room' => array(
-                    'id'          => 2, //password: admin123
+                    'id'          => 2, 
                     'number'       => 102, 
                     'room_type_fk' => 1,
                     'price'       => 50,
@@ -55,7 +55,7 @@ class RoomSeeder extends Seeder
                "Room_3" => array(
 
                 'room' => array(
-                    'id'          => 3, //password: admin123
+                    'id'          => 3, 
                     'number'       => 103, 
                     'room_type_fk' => 2,
                     'price'       => 68,
@@ -74,7 +74,7 @@ class RoomSeeder extends Seeder
               "Room_4" => array(
 
                 'room' => array(
-                    'id'          => 4, //password: admin123
+                    'id'          => 4, 
                     'number'       => 104, 
                     'room_type_fk' => 3,
                     'price'       => 20,

@@ -31,20 +31,9 @@
        
  
         @foreach($data['catt'] as $type) 
-        @foreach($data['cat1'] as $types)
-          @if( $data['room']->id == $types->room_id)     
-            @if ($types -> amenity_id == $type -> id )
-              <label>
-                <input type="checkbox" name="amenities[]" value="{{ $type->id }}" checked>{{ $type->name }}
-              </label>        
-               </br>
-              @endif 
-          @endif
-       @endforeach
-            <label>
-                <input type="checkbox" name="amenities[]" value="{{ $type->id }}" >{{ $type->name }}
-              </label>        
-               </br>
+          <label>
+              <input type="checkbox" name="amenities[]" {{ $type->checked }} value="{{ $type->id }}" >{{ $type->name }}
+          </label></br>
         @endforeach
           
 
