@@ -56,9 +56,9 @@
                                 <!--/ Administartorius -->
                                 @if(Auth::user()->Role->id == 1)
                                     <li>
-                                        <a href="{{ url('rooms') }}">
-                                        <i class="glyphicon glyphicon-bed"></i>
-                                        Kambariai </a>
+                                        <a href="{{ url('entertainments') }}">
+                                        <i class="glyphicon glyphicon-music"></i>
+                                        Pramogos </a>
                                     </li>
                                     <li>
                                         <a href="#">
